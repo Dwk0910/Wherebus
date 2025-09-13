@@ -5,6 +5,7 @@ import Menubar from "./Menubar";
 
 export default function Topbar() {
     const [open, setOpen] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
     return (
         <>
             <div className={"flex flex-row fixed items-center"}>
@@ -31,7 +32,12 @@ export default function Topbar() {
                     <IoMenu className={"text-white text-[1.8rem]"} />
                 </div>
             </div>
-            <Menubar open={open} setOpen={setOpen} />
+            <Menubar
+                open={open}
+                setOpen={setOpen}
+                isAnimating={isAnimating}
+                setIsAnimating={setIsAnimating}
+            />
         </>
     );
 }
