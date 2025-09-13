@@ -1,6 +1,7 @@
 package org.neatore.wherebus;
 
 import org.json.JSONObject;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,6 @@ public class Controller {
     @PostMapping("/get")
     public String get() {
         JSONObject result = new JSONObject();
-        
+        return result.toString();
     }
 }
