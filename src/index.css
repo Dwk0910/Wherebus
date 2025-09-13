@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+@font-face {
+    font-family: 'SeoulNamsan';
+    src: url("./assets/fonts/SeoulNamsanM.ttf");
+}
+
+body {
+    background-color: #1F1F1F;
+}
+
+.font-SeoulNamsan {
+    font-family: "SeoulNamsan", "monospace";
+}

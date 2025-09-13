@@ -2,10 +2,10 @@ import Topbar from "./component/Topbar";
 
 export default function App() {
     return (
-        <div className={"flex flex-col"}>
+        <div className={"flex flex-col h-[100vh]"}>
             <Topbar />
-            <div className={"mt-15"}>
-                <h1>Hello, World!</h1>
+            <div className={"pt-18 text-white"}>
+                <h1 className={"font-SeoulNamsan"}>Hello, World!</h1>
             </div>
         </div>
     );
