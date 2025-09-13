@@ -5,7 +5,7 @@ export default function App() {
         <div className={"flex flex-col h-[100vh]"}>
             <Topbar />
             <div className={"pt-18 text-white"}>
-                <h1 className={"font-SeoulNamsan"}>Hello, World!</h1>
+                <div></div>
             </div>
         </div>
     );
