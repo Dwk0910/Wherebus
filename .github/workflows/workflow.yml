@@ -10,8 +10,6 @@ name: Gradle CI
 on:
   push:
     branches: [ "master", "Development" ]
-  pull_request:
-    branches: [ "master", "Development" ]
 
 jobs:
   build:
