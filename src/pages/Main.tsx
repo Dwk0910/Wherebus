@@ -3,7 +3,7 @@ import isometric from "../assets/images/isometric.png";
 
 export default function Main() {
     return (
-        <>
+        <div className={"flex flex-col h-full"}>
             <div className={"w-full flex justify-center slideIn"}>
                 <img src={isometric} alt={"des"} className={"w-79"} />
             </div>
@@ -42,7 +42,34 @@ export default function Main() {
                     />
                 </div>
             </div>
-            <footer>aa</footer>
-        </>
+            <div
+                className={"grow w-full flex flex-col justify-end items-center"}
+            >
+                <span
+                    className={"font-SeoulNamsan text-gray-400 text-[1.03rem]"}
+                >
+                    Wherebus [어디쯤버스] PROJECT
+                </span>
+                <span className={"font-SeoulNamsan mb-2 text-gray-500"}>
+                    (C) 2025. Dwk0910 All rights reserved.
+                </span>
+                <span className={"font-suite mb-5 text-gray-500"}>
+                    This project is also available on{" "}
+                    <span
+                        className={clsx(
+                            "underline cursor-pointer hover:text-gray-400",
+                            "transition-all duration-200"
+                        )}
+                        onClick={() =>
+                            window.location.assign(
+                                "https://github.com/Dwk0910/Wherebus"
+                            )
+                        }
+                    >
+                        GitHub repository.
+                    </span>
+                </span>
+            </div>
+        </div>
     );
 }
