@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+backend/src/main/resources/bus_company_info.json
+backend/src/main/resources/bus_bus_info.json
