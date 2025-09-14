@@ -16,7 +16,7 @@ export default function Menubar({
         <div className={"flex flex-col"}>
             <div
                 className={clsx(
-                    "h-[70vh] bg-black z-10 transition-opacity duration-300",
+                    "fixed w-full h-[70vh] bg-black z-10 transition-opacity duration-300",
                     !open && "pointer-events-none"
                 )}
                 onClick={() => {
