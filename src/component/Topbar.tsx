@@ -4,6 +4,8 @@ import { clsx } from "clsx";
 import { IoMenu } from "react-icons/io5";
 import Menubar from "./Menubar";
 
+import icon from "../assets/images/icon.ico";
+
 export default function Topbar() {
     const [open, setOpen] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
@@ -12,6 +14,7 @@ export default function Topbar() {
             <div className={"flex flex-row fixed items-center"}>
                 <div
                     className={clsx(
+                        "flex flex-row items-center",
                         "bg-gray-700 m-3 px-6 pb-3 pt-4 shadow-2xl transition-all duration-200 ease-in-out",
                         "hover:scale-105 cursor-pointer"
                     )}
@@ -20,6 +23,11 @@ export default function Topbar() {
                     }}
                     onClick={() => window.location.assign("/")}
                 >
+                    <img
+                        src={icon}
+                        alt={"logo"}
+                        className={"w-7 h-6 border-gray-300 mb-0.5 mr-2"}
+                    />
                     <span
                         className={
                             "font-bold text-[1.2rem] text-white font-SeoulNamsan grow"
