@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { clsx } from "clsx";
 
 import { IoMenu } from "react-icons/io5";
 import Menubar from "./Menubar";
@@ -10,10 +11,14 @@ export default function Topbar() {
         <>
             <div className={"flex flex-row fixed items-center"}>
                 <div
-                    className={"bg-gray-700 m-3 px-6 pb-3 pt-4 shadow-2xl"}
+                    className={clsx(
+                        "bg-gray-700 m-3 px-6 pb-3 pt-4 shadow-2xl transition-all duration-200 ease-in-out",
+                        "hover:scale-105 cursor-pointer"
+                    )}
                     style={{
                         borderRadius: "5px 20px 5px 20px",
                     }}
+                    onClick={() => window.location.assign("/")}
                 >
                     <span
                         className={

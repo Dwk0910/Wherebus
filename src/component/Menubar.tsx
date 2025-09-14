@@ -18,6 +18,15 @@ export default function Menubar({
     setOpen: (open: boolean) => void;
     setIsAnimating: (animating: boolean) => void;
 }) {
+    const goTo = (to: string): void => {
+        setIsAnimating(true);
+        setOpen(false);
+        setTimeout(() => {
+            setIsAnimating(false);
+            window.location.assign(to);
+        }, 300);
+    };
+
     return (
         <div className={"flex flex-col"}>
             <div
@@ -90,6 +99,7 @@ export default function Menubar({
                                 "w-30 h-30 font-suite flex flex-col justify-center items-center rounded-[15px] border-gray-300 border-1 transition-all duration-200",
                                 "hover:scale-105 hover:shadow-2xl cursor-pointer"
                             )}
+                            onClick={() => goTo("/stops")}
                         >
                             <GiBusStop className={"text-[3.5rem]"} />
                             <span className={"text-gray-300"}>
@@ -102,6 +112,7 @@ export default function Menubar({
                                 "hover:scale-105 hover:shadow-2xl cursor-pointer",
                                 "ml-4"
                             )}
+                            onClick={() => goTo("/routes")}
                         >
                             <CiRoute className={"text-[3.5rem]"} />
                             <span className={"text-gray-300"}>
@@ -123,6 +134,11 @@ export default function Menubar({
                                 "w-30 h-30 font-suite flex flex-col justify-center items-center rounded-[15px] border-gray-300 border-1 transition-all duration-200",
                                 "hover:scale-105 hover:shadow-2xl cursor-pointer"
                             )}
+                            onClick={() =>
+                                window.location.assign(
+                                    "https://github.com/Dwk0910/Wherebus"
+                                )
+                            }
                         >
                             <FaGithub className={"text-[3rem] mb-2"} />
                             <span className={"text-gray-300"}>GitHub</span>

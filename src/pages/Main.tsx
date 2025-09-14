@@ -26,19 +26,21 @@ export default function Main() {
                 <div className={"flex flex-row mt-3"}>
                     <input
                         type={"button"}
-                        value={"특정 정류소 도착정보"}
+                        value={"정류소 도착정보"}
                         className={clsx(
                             "p-3 m-3 font-suite bg-gray-700 rounded-[5px] transition-all duration-200",
                             "cursor-pointer hover:bg-gray-500 hover:scale-105"
                         )}
+                        onClick={() => window.location.assign("/stops")}
                     />
                     <input
                         type={"button"}
-                        value={"전체노선 도착정보"}
+                        value={"노선 도착정보"}
                         className={clsx(
                             "p-3 my-3 mr-3 font-suite bg-gray-700 rounded-[5px] transition-all duration-200",
                             "cursor-pointer hover:bg-gray-500 hover:scale-105"
                         )}
+                        onClick={() => window.location.assign("/routes")}
                     />
                 </div>
             </div>
