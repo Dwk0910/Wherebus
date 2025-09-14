@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 
 // icons
-import { FaGithub, FaBug } from "react-icons/fa";
+import { FaHome, FaGithub, FaBug } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { GiBusStop } from "react-icons/gi";
 import { CiRoute } from "react-icons/ci";
@@ -86,6 +86,20 @@ export default function Menubar({
                         "[&::-webkit-scrollbar]:[width:6px]"
                     )}
                 >
+                    <div className={"w-full flex justify-center pb-5"}>
+                        <span
+                            className={clsx(
+                                "flex flex-row font-suite items-center justify-center scale-110",
+                                "border-neutral-400 border-1 p-3 mt-3 mb-6 mr-10 rounded-[5px]",
+                                "w-40",
+                                "transition-all duration-200 hover:scale-115 hover:shadow-2xl cursor-pointer"
+                            )}
+                            onClick={() => goTo("/")}
+                        >
+                            <FaHome className={"mr-2"} />
+                            홈으로
+                        </span>
+                    </div>
                     <span
                         className={
                             "font-SeoulNamsan text-[1.2rem] mb-3 text-gray-300"
