@@ -5,10 +5,35 @@
     src: url("./assets/fonts/SeoulNamsanM.ttf");
 }
 
-body {
-    background-color: #1F1F1F;
-}
-
 .font-SeoulNamsan {
     font-family: "SeoulNamsan", "monospace";
+}
+
+@font-face {
+    font-family: 'suite';
+    src: url("./assets/fonts/suite.ttf");
+}
+
+.font-suite {
+    font-family: "suite", "monospace";
+}
+
+/* Main page: slidein animations */
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slideIn {
+    animation: slideIn 1s ease-out forwards;
+}
+
+body {
+    background-color: #1F1F1F;
 }
