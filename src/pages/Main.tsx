@@ -5,7 +5,7 @@ export default function Main() {
     return (
         <>
             <div className={"w-full flex justify-center slideIn"}>
-                <img src={isometric} alt={"des"} className={"w-80"} />
+                <img src={isometric} alt={"des"} className={"w-79"} />
             </div>
             <div className={"w-full flex justify-center"}>
                 <span
@@ -42,6 +42,7 @@ export default function Main() {
                     />
                 </div>
             </div>
+            <footer>aa</footer>
         </>
     );
 }
