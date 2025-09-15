@@ -6,6 +6,7 @@ import Topbar from "./component/Topbar";
 import Main from "./pages/Main";
 import SearchStops from "./pages/stop/SearchStops.tsx";
 import SearchRoutes from "./pages/routes/SearchRoutes.tsx";
+import ViewRoutes from "./pages/routes/ViewRoutes.tsx";
 
 export default function App() {
     return (
@@ -16,6 +17,7 @@ export default function App() {
                     <Route index element={<Main />} />
                     <Route path={"/stops"} element={<SearchStops />} />
                     <Route path={"/routes"} element={<SearchRoutes />} />
+                    <Route path={"/routes/:routeId"} element={<ViewRoutes />} />
                 </Routes>
             </div>
         </div>
