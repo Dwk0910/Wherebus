@@ -107,7 +107,7 @@ export default function Menubar({
                     >
                         버스정보검색
                     </span>
-                    <div className={"flex flex-row"}>
+                    <div className={"flex flex-row justify-center"}>
                         <div
                             className={clsx(
                                 "w-30 h-30 font-suite flex flex-col justify-center items-center rounded-[15px] border-gray-300 border-1 transition-all duration-200",
@@ -142,7 +142,7 @@ export default function Menubar({
                     >
                         기타
                     </span>
-                    <div className={"flex flex-row"}>
+                    <div className={"flex flex-row justify-center"}>
                         <div
                             className={clsx(
                                 "w-30 h-30 font-suite flex flex-col justify-center items-center rounded-[15px] border-gray-300 border-1 transition-all duration-200",
