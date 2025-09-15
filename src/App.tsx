@@ -15,6 +15,11 @@ export default function App() {
             <div className={"pt-18 text-white h-full"}>
                 <Routes>
                     <Route index element={<Main />} />
+                    <Route
+                        path={"/error/404"}
+                        element={<span>Error 404</span>}
+                    />
+
                     <Route path={"/stops"} element={<SearchStops />} />
                     <Route path={"/routes"} element={<SearchRoutes />} />
                     <Route path={"/routes/:routeId"} element={<ViewRoutes />} />
