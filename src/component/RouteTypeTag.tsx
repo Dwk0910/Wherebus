@@ -12,14 +12,14 @@ export default function RouteTypeTag({ type }: { type: string }): ReactElement {
             break;
         case "지선버스":
             str = {
-                bgColor: "#2ee73f",
+                bgColor: "#26aa32",
                 textColor: "#FFFFFF",
                 name: "지선버스",
             };
             break;
         case "순환버스":
             str = {
-                bgColor: "#f79c1c",
+                bgColor: "#c57f18",
                 textColor: "#FFFFFF",
                 name: "순환버스",
             };
