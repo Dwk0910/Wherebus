@@ -4,8 +4,9 @@ import Topbar from "./component/Topbar";
 
 // pages
 import Main from "./pages/Main";
-import SearchStops from "./pages/SearchStops";
-import SearchRoutes from "./pages/SearchRoutes";
+import SearchStops from "./pages/stop/SearchStops.tsx";
+import SearchRoutes from "./pages/routes/SearchRoutes.tsx";
+import ViewRoutes from "./pages/routes/ViewRoutes.tsx";
 
 export default function App() {
     return (
@@ -14,8 +15,14 @@ export default function App() {
             <div className={"pt-18 text-white h-full"}>
                 <Routes>
                     <Route index element={<Main />} />
+                    <Route
+                        path={"/error/404"}
+                        element={<span>Error 404</span>}
+                    />
+
                     <Route path={"/stops"} element={<SearchStops />} />
                     <Route path={"/routes"} element={<SearchRoutes />} />
+                    <Route path={"/routes/:routeId"} element={<ViewRoutes />} />
                 </Routes>
             </div>
         </div>

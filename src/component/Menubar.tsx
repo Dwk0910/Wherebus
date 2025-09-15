@@ -68,7 +68,7 @@ export default function Menubar({
                     </span>
                     <IoClose
                         className={
-                            "text-5xl m-7 text-gray-400 hover:text-gray-600 cursor-pointer"
+                            "text-5xl m-5 text-gray-400 hover:text-gray-600 cursor-pointer"
                         }
                         onClick={() => {
                             setIsAnimating(true);
@@ -81,12 +81,12 @@ export default function Menubar({
                 </div>
                 <div
                     className={clsx(
-                        "flex flex-col px-6 mr-[5px] h-full",
+                        "flex flex-col px-6 mb-6 mr-[5px] h-full",
                         "overflow-y-scroll scrollbar scrollbar-thumb-neutral-700 scrollbar-hover:scrollbar-thumb-neutral-500",
                         "[&::-webkit-scrollbar]:[width:6px]"
                     )}
                 >
-                    <div className={"w-full flex justify-center pb-5"}>
+                    <div className={"w-full flex justify-center pb-2"}>
                         <span
                             className={clsx(
                                 "flex flex-row font-suite items-center justify-center scale-110",
@@ -107,7 +107,7 @@ export default function Menubar({
                     >
                         버스정보검색
                     </span>
-                    <div className={"flex flex-row"}>
+                    <div className={"flex flex-row justify-center"}>
                         <div
                             className={clsx(
                                 "w-30 h-30 font-suite flex flex-col justify-center items-center rounded-[15px] border-gray-300 border-1 transition-all duration-200",
@@ -142,7 +142,7 @@ export default function Menubar({
                     >
                         기타
                     </span>
-                    <div className={"flex flex-row"}>
+                    <div className={"flex flex-row justify-center"}>
                         <div
                             className={clsx(
                                 "w-30 h-30 font-suite flex flex-col justify-center items-center rounded-[15px] border-gray-300 border-1 transition-all duration-200",
