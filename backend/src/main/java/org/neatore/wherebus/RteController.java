@@ -8,9 +8,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @CrossOrigin(origins = {"http://localhost:5173"})
 public class RteController {
+    @PostMapping("/getRoute")
+    public Map<String, String> getRoute(@RequestParam("routeId") String routeId) {
+        return Util.getRouteById(routeId).toMap();
+    }
+
     @PostMapping("/searchRoute")
     public String get(@RequestParam("query") String query) {
         /*
