@@ -42,10 +42,13 @@ export default function RouteTypeTag({ type }: { type: string }): ReactElement {
 
     return (
         <span
-            className={"rounded-[5px] p-1 h-7 font-suite flex items-center"}
+            className={
+                "rounded-[8px] p-1 pt-1.5 h-8 w-17 text-[0.9rem] font-suite flex items-center justify-center"
+            }
             style={{
                 backgroundColor: str.bgColor,
                 color: str.textColor,
+                letterSpacing: "0.05em",
             }}
         >
             {str.name}

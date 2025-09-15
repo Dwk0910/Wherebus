@@ -72,9 +72,12 @@ export default function SearchRoutes() {
                             )}
                         >
                             <div className={"flex flex-row grow items-center"}>
+                                <div className={"mr-3"}>
+                                    <RouteTypeTag type={item.type} />
+                                </div>
                                 <span
                                     className={clsx(
-                                        "font-suite mr-3 min-w-17 max-w-35 text-nowrap overflow-hidden",
+                                        "font-suite max-w-35 text-nowrap overflow-hidden",
                                         item.route_name.length > 4
                                             ? "text-2xl"
                                             : "text-4xl"
@@ -82,9 +85,6 @@ export default function SearchRoutes() {
                                 >
                                     {item.route_name}
                                 </span>
-                                <div>
-                                    <RouteTypeTag type={item.type} />
-                                </div>
                             </div>
                             <div
                                 className={
