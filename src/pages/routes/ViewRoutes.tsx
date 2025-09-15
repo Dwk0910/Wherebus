@@ -4,7 +4,7 @@ export default function ViewRoutes() {
     const { routeId } = useParams();
     return (
         <div>
-            <span>View route</span>
+            <span>View route: {routeId}</span>
         </div>
     );
 }
