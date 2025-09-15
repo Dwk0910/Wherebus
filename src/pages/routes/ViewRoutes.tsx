@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 import { type ReactNode, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -8,11 +10,21 @@ import RouteTypeTag from "../../component/RouteTypeTag";
 export default function ViewRoutes() {
     const { routeId } = useParams();
     const [routeInfo, setRouteInfo] = useState<Route | null | undefined>(null);
+    const [route, setRoute] = useState<Array<Object>>([{}]);
 
     useEffect(() => {
         getRouteById(routeId as string).then((res) => {
             if (res === null) setRouteInfo(undefined);
             setRouteInfo(res);
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/getRoute",
+            data: { routeId },
+            dataType: "json",
+        }).then((res) => {
+            setRoute(JSON.parse(res["routes"]));
         });
     }, []);
 
@@ -20,6 +32,7 @@ export default function ViewRoutes() {
 
     if (routeInfo === undefined) window.location.assign("/error/404");
     else if (routeInfo) {
+        console.log(route);
         content = (
             <div className={"w-full flex flex-col px-4"}>
                 <div
@@ -32,7 +45,7 @@ export default function ViewRoutes() {
                         {routeInfo.route_name}
                     </span>
                 </div>
-                <div>
+                <div className={"grow overflow-y-hidden"}>
                     {/* INFO AREA */}
                     <div className={"flex flex-col mt-6 ml-5"}>
                         <span
