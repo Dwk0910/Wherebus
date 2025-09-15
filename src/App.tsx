@@ -4,7 +4,7 @@ import Topbar from "./component/Topbar";
 
 // pages
 import Main from "./pages/Main";
-import SearchStops from "./pages/routes/SearchStops.tsx";
+import SearchStops from "./pages/stop/SearchStops.tsx";
 import SearchRoutes from "./pages/routes/SearchRoutes.tsx";
 
 export default function App() {

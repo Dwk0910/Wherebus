@@ -54,7 +54,9 @@ export default function SearchRoutes() {
                         "ml-3 px-3 font-suite bg-neutral-700 border-neutral-400 border-1 rounded-[5px] h-15 w-20",
                         "cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-2xl"
                     )}
-                    onClick={() => search(searchInput)}
+                    onClick={() => {
+                        if (searchInput) search(searchInput);
+                    }}
                 />
             </div>
             <div className={"flex flex-col items-center py-5"}>
@@ -69,7 +71,7 @@ export default function SearchRoutes() {
                                 "transition-all duration-200 hover:scale-102 hover:shadow-2xl cursor-pointer"
                             )}
                         >
-                            <div className={"flex flex-row grow items-end"}>
+                            <div className={"flex flex-row grow items-center"}>
                                 <span
                                     className={clsx(
                                         "font-suite mr-3 min-w-17 max-w-35 text-nowrap overflow-hidden",
@@ -80,7 +82,7 @@ export default function SearchRoutes() {
                                 >
                                     {item.route_name}
                                 </span>
-                                <div className={"mb-1"}>
+                                <div>
                                     <RouteTypeTag type={item.type} />
                                 </div>
                             </div>
