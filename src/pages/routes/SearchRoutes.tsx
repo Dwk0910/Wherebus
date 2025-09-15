@@ -40,7 +40,7 @@ export default function SearchRoutes() {
                     type={"search"}
                     placeholder={"노선 이름 입력"}
                     className={
-                        "p-4 bg-neutral-900 border-neutral-400 border-1 rounded-[5px] h-15 w-80"
+                        "p-4 bg-neutral-900 border-neutral-400 border-1 rounded-[5px] h-15 w-[70vw]"
                     }
                     value={searchInput}
                     onChange={(e) => {
@@ -66,10 +66,15 @@ export default function SearchRoutes() {
                             key={idx}
                             className={clsx(
                                 "flex flex-row items-end",
-                                "p-3 mt-5 w-102",
+                                "p-3 mt-5 w-[94vw]",
                                 "bg-gray-700 border-gray-500 border-1 rounded-[5px]",
                                 "transition-all duration-200 hover:scale-102 hover:shadow-2xl cursor-pointer"
                             )}
+                            onClick={() => {
+                                window.location.assign(
+                                    `/routes/${item.route_id}`
+                                );
+                            }}
                         >
                             <div className={"flex flex-row grow items-center"}>
                                 <div className={"mr-3"}>
@@ -77,13 +82,48 @@ export default function SearchRoutes() {
                                 </div>
                                 <span
                                     className={clsx(
-                                        "font-suite max-w-35 text-nowrap overflow-hidden",
-                                        item.route_name.length > 4
-                                            ? "text-2xl"
-                                            : "text-4xl"
+                                        "font-suite min-w-20 max-w-35 text-nowrap overflow-hidden text-4xl"
+                                        // item.route_name.length > 4
+                                        //     ? "text-2xl"
+                                        //     : "text-4xl"
                                     )}
                                 >
-                                    {item.route_name}
+                                    {item.route_name
+                                        .split("")
+                                        .map((item_str, idx) => {
+                                            if (/^[\x00-\x7F]+$/.test(item_str))
+                                                if (
+                                                    item.route_name.length > 4
+                                                ) {
+                                                    return (
+                                                        <span
+                                                            key={idx}
+                                                            className={
+                                                                "text-2xl"
+                                                            }
+                                                        >
+                                                            {item_str}
+                                                        </span>
+                                                    );
+                                                } else {
+                                                    return (
+                                                        <span key={idx}>
+                                                            {item_str}
+                                                        </span>
+                                                    );
+                                                }
+                                            else
+                                                return (
+                                                    <span
+                                                        key={idx}
+                                                        className={
+                                                            "text-[1.1rem]"
+                                                        }
+                                                    >
+                                                        {item_str}
+                                                    </span>
+                                                );
+                                        })}
                                 </span>
                             </div>
                             <div
@@ -94,10 +134,10 @@ export default function SearchRoutes() {
                                 <span
                                     className={"ml-5 font-suite flex flex-row"}
                                 >
-                                    <span className={"text-gray-300"}>
+                                    <span className={"text-gray-300 min-w-22"}>
                                         평균 배차간격
                                     </span>
-                                    <div className={"ml-4 w-11"}>
+                                    <div className={"ml-3 w-11"}>
                                         {item.term}분
                                     </div>
                                 </span>
