@@ -3,8 +3,6 @@ import $ from "jquery";
 import { type ReactNode, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { clsx } from "clsx";
-
 import { type Route, type LiveRoute, getRouteById } from "../../Util";
 
 import RouteTypeTag from "../../component/RouteTypeTag";
@@ -40,7 +38,7 @@ export default function ViewRoutes() {
             <div className={"w-full flex flex-col px-4"}>
                 <div
                     className={
-                        "w-full h-15 mt-1 flex flex-row justify-start items-center pt-13 pb-10"
+                        "w-full h-15 mt-1 pl-5 flex flex-row justify-start items-center pt-13 pb-10"
                     }
                 >
                     <RouteTypeTag type={routeInfo.type} />
@@ -48,7 +46,11 @@ export default function ViewRoutes() {
                         {routeInfo.route_name}
                     </span>
                 </div>
-                <div className={"grow overflow-y-auto"}>
+                <div
+                    className={
+                        "grow mb-6 overflow-y-auto scrollbar scrollbar-thumb-neutral-600 [&::-webkit-scrollbar]:[width:6px]"
+                    }
+                >
                     {/* INFO AREA */}
                     <div className={"flex flex-col my-6 ml-5"}>
                         <span
@@ -109,20 +111,31 @@ export default function ViewRoutes() {
                     </div>
 
                     {/* MAIN AREA */}
-                    {route.map((item) => {
+                    {route.map((item, idx) => {
                         return (
-                            <div className={"flex flex-row items-center"}>
+                            <div
+                                className={"flex flex-row items-center"}
+                                key={idx}
+                            >
                                 {/*Bus Layer*/}
                                 <div className={"w-15"}></div>
 
                                 {/*Line&Circle Layer*/}
                                 <div className={"flex flex-col items-center"}>
                                     <IoCaretDownCircleOutline size={20} />
-                                    <div
-                                        className={
-                                            "w-1.5 h-11 bg-gray-400 mt-[-2px] mb-[-2px]"
-                                        }
-                                    ></div>
+                                    {idx < route.length - 1 ? (
+                                        <div
+                                            className={
+                                                "w-1.5 h-11 bg-gray-400 mt-[-2px] mb-[-2px]"
+                                            }
+                                        ></div>
+                                    ) : (
+                                        <div
+                                            className={
+                                                "w-1.5 h-11 mt-[-2px] mb-[-2px]"
+                                            }
+                                        ></div>
+                                    )}
                                 </div>
 
                                 {/*Content Layer*/}
