@@ -1,18 +1,32 @@
+import $ from "jquery";
+
 import { type ReactNode, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { type Route, getRouteById } from "../../Util";
+import { type Route, type LiveRoute, getRouteById } from "../../Util";
 
 import RouteTypeTag from "../../component/RouteTypeTag";
+
+import { IoCaretDownCircleOutline } from "react-icons/io5";
 
 export default function ViewRoutes() {
     const { routeId } = useParams();
     const [routeInfo, setRouteInfo] = useState<Route | null | undefined>(null);
+    const [route, setRoute] = useState<Array<LiveRoute>>([]);
 
     useEffect(() => {
         getRouteById(routeId as string).then((res) => {
             if (res === null) setRouteInfo(undefined);
             setRouteInfo(res);
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/getRoute",
+            data: { routeId },
+            dataType: "json",
+        }).then((res) => {
+            setRoute(JSON.parse(res["routes"]));
         });
     }, []);
 
@@ -24,7 +38,7 @@ export default function ViewRoutes() {
             <div className={"w-full flex flex-col px-4"}>
                 <div
                     className={
-                        "w-full h-10 mt-1 flex flex-row justify-start items-center pt-7"
+                        "w-full h-15 mt-1 pl-5 flex flex-row justify-start items-center pt-13 pb-10"
                     }
                 >
                     <RouteTypeTag type={routeInfo.type} />
@@ -32,9 +46,13 @@ export default function ViewRoutes() {
                         {routeInfo.route_name}
                     </span>
                 </div>
-                <div>
+                <div
+                    className={
+                        "grow mb-6 overflow-y-auto scrollbar scrollbar-thumb-neutral-600 [&::-webkit-scrollbar]:[width:6px]"
+                    }
+                >
                     {/* INFO AREA */}
-                    <div className={"flex flex-col mt-6 ml-5"}>
+                    <div className={"flex flex-col my-6 ml-5"}>
                         <span
                             className={
                                 "text-neutral-200 font-suite text-[1.1rem]"
@@ -93,6 +111,42 @@ export default function ViewRoutes() {
                     </div>
 
                     {/* MAIN AREA */}
+                    {route.map((item, idx) => {
+                        return (
+                            <div
+                                className={"flex flex-row items-center"}
+                                key={idx}
+                            >
+                                {/*Bus Layer*/}
+                                <div className={"w-15"}></div>
+
+                                {/*Line&Circle Layer*/}
+                                <div className={"flex flex-col items-center"}>
+                                    <IoCaretDownCircleOutline size={20} />
+                                    {idx < route.length - 1 ? (
+                                        <div
+                                            className={
+                                                "w-1.5 h-11 bg-gray-400 mt-[-2px] mb-[-2px]"
+                                            }
+                                        ></div>
+                                    ) : (
+                                        <div
+                                            className={
+                                                "w-1.5 h-11 mt-[-2px] mb-[-2px]"
+                                            }
+                                        ></div>
+                                    )}
+                                </div>
+
+                                {/*Content Layer*/}
+                                <div className={"h-15 ml-3"}>
+                                    <span className={"font-suite font-bold"}>
+                                        {item.stNm}
+                                    </span>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         );

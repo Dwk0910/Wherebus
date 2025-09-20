@@ -1,12 +1,23 @@
 package org.neatore.wherebus;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.XML;
+
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import java.util.Map;
 
@@ -14,8 +25,28 @@ import java.util.Map;
 @CrossOrigin(origins = {"http://localhost:5173"})
 public class RteController {
     @PostMapping("/getRoute")
-    public Map<String, String> getRoute(@RequestParam("routeId") String routeId) {
-        return Util.getRouteById(routeId).toMap();
+    public ResponseEntity<@NotNull Map<String, String>> getRoute(@RequestParam("routeId") String routeId) {
+        JSONArray routes = new JSONArray();
+
+        JSONObject data;
+
+        // Test data
+        Resource testData = new ClassPathResource("testData.xml");
+        try {
+            byte[] fileData = FileCopyUtils.copyToByteArray(testData.getInputStream());
+            String xmldata = new String(fileData, StandardCharsets.UTF_8);
+            data = XML.toJSONObject(xmldata);
+        } catch (IOException ignored) {
+            return ResponseEntity.notFound().build();
+        }
+
+        for (Object o : data.getJSONObject("ServiceResult").getJSONObject("msgBody").getJSONArray("itemList")) {
+            routes.put(o);
+        }
+
+        final Map<String, String> result = Util.getRouteById(routeId).toMap();
+        result.put("routes", routes.toString());
+        return ResponseEntity.status(200).body(result);
     }
 
     @PostMapping("/searchRoute")
