@@ -11,6 +11,18 @@ export interface Route {
     end: string;
 }
 
+export interface LiveRoute {
+    arrmsg1: string;
+    arrmsg2: string;
+    arsId: number;
+    busRouteAbrv: number;
+    busRouteId: number;
+    nextBus: string;
+    plainNo1: string;
+    plainNo2: string;
+    stNm: string;
+}
+
 export const getRouteById = async (routeId: string) => {
     return $.ajax({
         type: "POST",
