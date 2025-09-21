@@ -1,9 +1,7 @@
-import $ from "jquery";
-
 import { type ReactNode, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { type Route, type LiveRoute, getRouteById } from "../../Util";
+import { type Route, type Station, getRouteInfoById, getStations } from "../../Util";
 
 import RouteTypeTag from "../../component/RouteTypeTag";
 
@@ -11,29 +9,30 @@ import { IoCaretDownCircleOutline } from "react-icons/io5";
 
 export default function ViewRoutes() {
     const { routeId } = useParams();
-    const [routeInfo, setRouteInfo] = useState<Route | null | undefined>(null);
-    const [route, setRoute] = useState<Array<LiveRoute>>([]);
+    const [route, setRoute] = useState<Route | null | undefined>(null);
+    const [stations, setStations] = useState<Array<Station>>([]);
+    const [busInfo, setBusInfo] = useState();
 
     useEffect(() => {
-        getRouteById(routeId as string).then((res) => {
-            if (res === null) setRouteInfo(undefined);
-            setRouteInfo(res);
+        // Register route info
+        getRouteInfoById(routeId as string).then((res) => {
+            if (res === null) setRoute(undefined);
+            else setRoute(res);
         });
 
-        $.ajax({
-            type: "POST",
-            url: "http://localhost:8080/getRoute",
-            data: { routeId },
-            dataType: "json",
-        }).then((res) => {
-            setRoute(JSON.parse(res["routes"]));
-        });
-    }, []);
+        // Register Station list
+        getStations(routeId as string).then(res => {
+            setStations(res);
+        })
+
+        // Scheduler for live bus info
+
+    }, [routeId]);
 
     let content: ReactNode;
 
-    if (routeInfo === undefined) window.location.assign("/error/404");
-    else if (routeInfo) {
+    if (route === undefined) window.location.assign("/error/404");
+    else if (route) {
         content = (
             <div className={"w-full flex flex-col px-4"}>
                 <div
@@ -41,14 +40,14 @@ export default function ViewRoutes() {
                         "w-full h-15 mt-1 pl-5 flex flex-row justify-start items-center pt-13 pb-10"
                     }
                 >
-                    <RouteTypeTag type={routeInfo.type} />
+                    <RouteTypeTag type={route.type} />
                     <span className={"font-suite text-4xl ml-3"}>
-                        {routeInfo.route_name}
+                        {route.route_name}
                     </span>
                 </div>
                 <div
                     className={
-                        "grow mb-6 overflow-y-auto scrollbar scrollbar-thumb-neutral-600 [&::-webkit-scrollbar]:[width:6px]"
+                        "grow mb-6 overflow-y-auto overflow-x-auto scrollbar scrollbar-thumb-neutral-600 [&::-webkit-scrollbar]:[width:6px] [&::-webkit-scrollbar]:[height:6px]"
                     }
                 >
                     {/* INFO AREA */}
@@ -58,7 +57,7 @@ export default function ViewRoutes() {
                                 "text-neutral-200 font-suite text-[1.1rem]"
                             }
                         >
-                            {routeInfo.corpName}
+                            {route.corpName}
                         </span>
                         <span className={"flex flex-row mt-3"}>
                             <span className={"font-suite text-gray-400 w-17"}>
@@ -69,7 +68,7 @@ export default function ViewRoutes() {
                                     "text-gray-300 font-suite text-[1.1rem]"
                                 }
                             >
-                                {routeInfo.start}
+                                {route.start}
                             </span>
                         </span>
                         <span className={"flex flex-row"}>
@@ -81,7 +80,7 @@ export default function ViewRoutes() {
                                     "text-gray-300 font-suite text-[1.1rem]"
                                 }
                             >
-                                {routeInfo.end}
+                                {route.end}
                             </span>
                         </span>
                         <span className={"flex flex-row"}>
@@ -93,7 +92,7 @@ export default function ViewRoutes() {
                                     "text-gray-300 font-suite text-[1.1rem]"
                                 }
                             >
-                                {routeInfo.length}km
+                                {route.length}km
                             </span>
                         </span>
                         <span className={"flex flex-row"}>
@@ -105,13 +104,13 @@ export default function ViewRoutes() {
                                     "text-gray-300 font-suite text-[1.1rem]"
                                 }
                             >
-                                {routeInfo.term}분
+                                {route.term}분
                             </span>
                         </span>
                     </div>
 
                     {/* MAIN AREA */}
-                    {route.map((item, idx) => {
+                    {stations.map((item, idx) => {
                         return (
                             <div
                                 className={"flex flex-row items-center"}
@@ -123,10 +122,10 @@ export default function ViewRoutes() {
                                 {/*Line&Circle Layer*/}
                                 <div className={"flex flex-col items-center"}>
                                     <IoCaretDownCircleOutline size={20} />
-                                    {idx < route.length - 1 ? (
+                                    {idx < stations.length - 1 ? (
                                         <div
                                             className={
-                                                "w-1.5 h-11 bg-gray-400 mt-[-2px] mb-[-2px]"
+                                                "w-1.5 h-11 bg-gray-400 mt-[-2px] mb-[-8px]"
                                             }
                                         ></div>
                                     ) : (
@@ -139,10 +138,11 @@ export default function ViewRoutes() {
                                 </div>
 
                                 {/*Content Layer*/}
-                                <div className={"h-15 ml-3"}>
-                                    <span className={"font-suite font-bold"}>
+                                <div className={"h-15 ml-3 flex flex-col "}>
+                                    <span className={"font-SeoulNamsan font-bold text-nowrap max-w-50"}>
                                         {item.stNm}
                                     </span>
+                                    <span className={"font-SeoulNamsan text-gray-400"}>{item.arsId}</span>
                                 </div>
                             </div>
                         );

@@ -1,6 +1,6 @@
 import $ from "jquery";
 
-import { type Route } from "../../Util";
+import { type BasicRouteInfo } from "../../Util";
 
 import RouteTypeTag from "../../component/RouteTypeTag.tsx";
 
@@ -9,7 +9,7 @@ import { clsx } from "clsx";
 
 export default function SearchRoutes() {
     const [searchInput, setSearchInput] = useState<string>("");
-    const [routes, setRoutes] = useState<Array<Route>>([]);
+    const [routes, setRoutes] = useState<Array<BasicRouteInfo>>([]);
 
     const search: (query: string) => void = (query) => {
         $.ajax({
@@ -53,7 +53,7 @@ export default function SearchRoutes() {
             </div>
             <div className={"flex flex-col items-center py-5"}>
                 {routes &&
-                    routes.map((item: Route, idx: number) => (
+                    routes.map((item: BasicRouteInfo, idx: number) => (
                         <div
                             key={idx}
                             className={clsx(
