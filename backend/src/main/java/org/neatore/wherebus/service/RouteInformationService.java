@@ -21,6 +21,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -62,8 +65,25 @@ public class RouteInformationService {
         }
     }
 
+    public List<Map<String, Object>> getStations(String route_id) {
+        final List<Map<String, Object>> stations = new ArrayList<>();
+
+        // arrival information을 이용해서 stations 구하기
+        JSONObject response = new JSONObject(getArrivalInformation(route_id));
+        for (Object o : response.getJSONObject("ServiceResult").getJSONObject("msgBody").getJSONArray("itemList")) {
+            final Map<String, Object> station = new HashMap<>();
+            JSONObject obj = new JSONObject(o.toString());
+            station.put("stNm", obj.getString("stNm"));
+            station.put("arsId", obj.getInt("arsId"));
+            stations.add(station);
+        }
+
+        return stations;
+    }
+
     public Route getRoute(String route_id) {
         // TODO: 노선 정보 API (아직 허가가 안남) 등록해야함
+        // TODO: http://ws.bus.go.kr/api/rest/busRouteInfo/getRouteInfo (노선정보조회시스템)
 
         JSONObject data = new JSONObject();
         // ** TEST DATA **
