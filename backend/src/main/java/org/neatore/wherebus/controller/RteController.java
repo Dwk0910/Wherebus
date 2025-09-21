@@ -1,5 +1,6 @@
-package org.neatore.wherebus;
+package org.neatore.wherebus.controller;
 
+import org.neatore.wherebus.Util;
 import org.jetbrains.annotations.NotNull;
 
 import org.json.JSONArray;
