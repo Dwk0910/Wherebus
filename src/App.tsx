@@ -9,6 +9,7 @@ import SearchRoutes from "./pages/routes/SearchRoutes.tsx";
 import ViewRoutes from "./pages/routes/ViewRoutes.tsx";
 
 export default function App() {
+    // TODO: Backend Health 확인
     return (
         <div className={"flex flex-col h-[100vh]"}>
             <Topbar />
