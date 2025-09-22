@@ -14,6 +14,8 @@ public class Wherebus {
     public static final Logger LOGGER = LoggerFactory.getLogger(Wherebus.class);
     public static final Path dataFolder = Path.of(System.getProperty("user.dir"), "data");
 
+    public static final String[] origins = {"http://localhost:5173"};
+
     public static void main(String[] args) throws IOException {
         if (!dataFolder.toFile().exists()) Files.createDirectories(dataFolder);
         SpringApplication.run(Wherebus.class, args);
