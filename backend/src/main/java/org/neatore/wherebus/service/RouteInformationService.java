@@ -68,6 +68,7 @@ public class RouteInformationService {
     public List<Map<String, Object>> getStations(String route_id) {
         final List<Map<String, Object>> stations = new ArrayList<>();
 
+        // TODO: 노선 정보 API로 바꿔야 함
         // arrival information을 이용해서 stations 구하기
         JSONObject response = new JSONObject(getArrivalInformation(route_id));
         for (Object o : response.getJSONObject("ServiceResult").getJSONObject("msgBody").getJSONArray("itemList")) {
