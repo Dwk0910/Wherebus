@@ -51,7 +51,7 @@ public class RteController {
         // ** TEST (SAMPLE DATA) **
         // JSONObject data = new JSONObject("...");
 
-        JSONObject data = new JSONObject(routeListService.getBusList());
+        JSONObject data = new JSONObject(routeListService.getRouteList());
 
         if (data.isEmpty()) return ResponseEntity.status(500).build();
 
