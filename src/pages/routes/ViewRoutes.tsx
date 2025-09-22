@@ -9,6 +9,7 @@ import { IoCaretDownCircleOutline } from "react-icons/io5";
 
 export default function ViewRoutes() {
     const { routeId } = useParams();
+
     const [route, setRoute] = useState<Route | null | undefined>(null);
     const [stations, setStations] = useState<Array<Station>>([]);
     const [busInfo, setBusInfo] = useState();
@@ -110,7 +111,7 @@ export default function ViewRoutes() {
                     </div>
 
                     {/* MAIN AREA */}
-                    {stations.map((item, idx) => {
+                    {stations.length !== 0 ? stations.map((item, idx) => {
                         return (
                             <div
                                 className={"flex flex-row items-center"}
@@ -146,7 +147,9 @@ export default function ViewRoutes() {
                                 </div>
                             </div>
                         );
-                    })}
+                    }) : (
+                        <div>경로를 불러오는 중입니다...</div>
+                    )}
                 </div>
             </div>
         );
