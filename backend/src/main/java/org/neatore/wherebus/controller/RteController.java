@@ -1,5 +1,6 @@
 package org.neatore.wherebus.controller;
 
+import org.neatore.wherebus.object.Route;
 import org.neatore.wherebus.service.RouteInformationService;
 import org.neatore.wherebus.service.RouteListService;
 
@@ -27,14 +28,11 @@ public class RteController {
         this.routeInformationService = busArrivalService;
     }
 
-    @PostMapping("/getStations")
-    public ResponseEntity<@NotNull List<Map<String, Object>>> getStations(@RequestParam("routeId") String routeId) {
-        return ResponseEntity.status(200).body(routeInformationService.getStations(routeId));
-    }
-
-    @PostMapping("/getRouteInfo")
-    public ResponseEntity<@NotNull Map<String, String>> getRoute(@RequestParam("routeId") String routeId) {
-        return ResponseEntity.status(200).body(routeInformationService.getRoute(routeId).toMap());
+    @PostMapping("/getRoute")
+    public ResponseEntity<@NotNull Map<String, Object>> getRoute(@RequestParam("routeId") String routeId) {
+        Route route = routeInformationService.getRoute(routeId);
+        if (route == null) return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(200).body(route.toMap());
     }
 
     @PostMapping("/searchRoute")
@@ -57,8 +55,10 @@ public class RteController {
         JSONArray result = new JSONArray();
         for (Object o : data.getJSONObject("busRoute").getJSONArray("row")) {
             JSONObject obj = new JSONObject(o.toString());
-            if (obj.getString("RTE_NM").contains(query))
-                result.put(routeInformationService.getRoute(obj.getString("RTE_ID")).toMap());
+            if (obj.getString("RTE_NM").contains(query)) {
+                Route route = routeInformationService.getRoute(obj.getString("RTE_ID"));
+                if (route != null) result.put(route.toMap());
+            }
         }
 
         return ResponseEntity.ok(result.toList());
