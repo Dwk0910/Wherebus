@@ -1,11 +1,17 @@
 import $ from "jquery";
-
-import { type BasicRouteInfo } from "../../Util";
-
 import RouteTypeTag from "../../component/RouteTypeTag.tsx";
 
 import { useState } from "react";
 import { clsx } from "clsx";
+
+interface BasicRouteInfo {
+    route_id: number;
+    route_name: string;
+    type: string;
+    term: number;
+    start: string;
+    end: string;
+}
 
 export default function SearchRoutes() {
     const [searchInput, setSearchInput] = useState<string>("");
