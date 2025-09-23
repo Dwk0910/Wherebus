@@ -1,7 +1,7 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { type Route, type Station, getRouteInfoById, getStations } from "../../Util";
+import { type Route, type Station, getRouteById } from "../../Util";
 
 import RouteTypeTag from "../../component/RouteTypeTag";
 
@@ -16,17 +16,15 @@ export default function ViewRoutes() {
 
     useEffect(() => {
         // Register route info
-        getRouteInfoById(routeId as string).then((res) => {
+        getRouteById(routeId as string).then((res) => {
             if (res === null) setRoute(undefined);
-            else setRoute(res);
+            else {
+                setRoute(res);
+                setStations(res.stations);
+            }
         });
 
-        // Register Station list
-        getStations(routeId as string).then(res => {
-            setStations(res);
-        })
-
-        // Scheduler for live bus info
+        // TODO: Scheduler for live bus info
 
     }, [routeId]);
 
@@ -141,7 +139,7 @@ export default function ViewRoutes() {
                                 {/*Content Layer*/}
                                 <div className={"h-15 ml-3 flex flex-col "}>
                                     <span className={"font-SeoulNamsan font-bold text-nowrap max-w-50"}>
-                                        {item.stNm}
+                                        {item.stationNm}
                                     </span>
                                     <span className={"font-SeoulNamsan text-gray-400"}>{item.arsId}</span>
                                 </div>
