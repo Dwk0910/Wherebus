@@ -3,16 +3,22 @@ import { useParams } from "react-router-dom";
 
 import { type Route, type Station, getRouteById } from "../../Util";
 
-import RouteTypeTag from "../../component/RouteTypeTag";
+import RouteTypeTag, { getColor } from "../../component/RouteTypeTag";
 
 import { IoCaretDownCircleOutline } from "react-icons/io5";
+import { FaBus } from 'react-icons/fa';
+
+interface Bus {
+    pos: string;
+    plate: string;
+}
 
 export default function ViewRoutes() {
     const { routeId } = useParams();
 
     const [route, setRoute] = useState<Route | null | undefined>(null);
     const [stations, setStations] = useState<Array<Station>>([]);
-    const [busInfo, setBusInfo] = useState();
+    const [buses, setBuses] = useState<Array<Bus>>([]);
 
     useEffect(() => {
         // Register route info
@@ -26,6 +32,14 @@ export default function ViewRoutes() {
 
         // TODO: Scheduler for live bus info
 
+        // **TEST**
+        setBuses([{
+            pos: "0.5",
+            plate: "서울74아1275"
+        }, {
+            pos: "5",
+            plate: "서울74사2577"
+        }])
     }, [routeId]);
 
     let content: ReactNode;
@@ -115,29 +129,47 @@ export default function ViewRoutes() {
                                 className={"flex flex-row items-center"}
                                 key={idx}
                             >
-                                {/*Bus Layer*/}
-                                <div className={"w-15"}></div>
 
                                 {/*Line&Circle Layer*/}
-                                <div className={"flex flex-col items-center"}>
-                                    <IoCaretDownCircleOutline size={20} />
-                                    {idx < stations.length - 1 ? (
-                                        <div
-                                            className={
-                                                "w-1.5 h-11 bg-gray-400 mt-[-2px] mb-[-8px]"
-                                            }
-                                        ></div>
-                                    ) : (
-                                        <div
-                                            className={
-                                                "w-1.5 h-11 mt-[-2px] mb-[-2px]"
-                                            }
-                                        ></div>
-                                    )}
+                                <div className={"flex flex-col items-start"}>
+                                    <div className={"flex flex-row"}>
+                                        {/*Bus (Station) Layer*/}
+                                        <div className={"w-10 mt-0.5 ml-5 mr-[-15px]"}>
+                                            {buses.map(bus => {
+                                                if (bus.pos === idx.toString()) return (
+                                                    <FaBus key={idx} style={{ color: getColor(route.type) }}/>
+                                                );
+                                            })}
+                                        </div>
+                                        <IoCaretDownCircleOutline size={20} />
+                                    </div>
+                                    <div className={"flex flex-row"}>
+                                        {/*Bus (Line) Layer*/}
+                                        <div className={"relative w-10 mt-[12px] ml-5 mr-[-15px]"}>
+                                            {buses.map(bus => {
+                                                if (bus.pos === idx.toString() + ".5") return (
+                                                    <FaBus key={idx} style={{ color: getColor(route.type) }}/>
+                                                );
+                                            })}
+                                        </div>
+                                        {idx < stations.length - 1 ? (
+                                            <div
+                                                className={
+                                                    "w-1.5 h-11 bg-gray-400 mt-[-2px] mb-[-5px] ml-[6.6px]"
+                                                }
+                                            ></div>
+                                        ) : (
+                                            <div
+                                                className={
+                                                    "w-1.5 h-11 mt-[-2px] mb-[-2px]"
+                                                }
+                                            ></div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/*Content Layer*/}
-                                <div className={"h-15 ml-3 flex flex-col "}>
+                                <div className={"h-15 ml-3 flex flex-col"}>
                                     <span className={"font-SeoulNamsan font-bold text-nowrap max-w-50"}>
                                         {item.stationNm}
                                     </span>
