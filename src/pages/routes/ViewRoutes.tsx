@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { type JSX, type ReactNode, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { type Route, type Station, getRouteById } from "../../Util";
@@ -19,6 +19,26 @@ export default function ViewRoutes() {
     const [route, setRoute] = useState<Route | null | undefined>(null);
     const [stations, setStations] = useState<Array<Station>>([]);
     const [buses, setBuses] = useState<Array<Bus>>([]);
+
+    const getBus = (idx: string): JSX.Element | "" => {
+        for (const bus of buses) {
+            if (bus.pos === idx) {
+                return (
+                    <>
+                        <FaBus
+                            key={idx}
+                            style={{ color: getColor(route!.type) }}
+                        />
+                        <div className={"text-[0.7rem]"}>
+                            {bus.plate.match(/.(\d+)$/)![1]}
+                        </div>
+                    </>
+                );
+            }
+        }
+        return "";
+    }
+
 
     useEffect(() => {
         // Register route info
@@ -126,7 +146,7 @@ export default function ViewRoutes() {
                     {stations.length !== 0 ? stations.map((item, idx) => {
                         return (
                             <div
-                                className={"flex flex-row items-center"}
+                                className={"relative flex flex-row items-center"}
                                 key={idx}
                             >
 
@@ -134,34 +154,26 @@ export default function ViewRoutes() {
                                 <div className={"flex flex-col items-start"}>
                                     <div className={"flex flex-row"}>
                                         {/*Bus (Station) Layer*/}
-                                        <div className={"w-10 mt-0.5 ml-5 mr-[-15px]"}>
-                                            {buses.map(bus => {
-                                                if (bus.pos === idx.toString()) return (
-                                                    <FaBus key={idx} style={{ color: getColor(route.type) }}/>
-                                                );
-                                            })}
+                                        <div className={"absolute flex flex-col justify-start items-center w-10 mt-0.5"}>
+                                            {getBus(idx.toString())}
                                         </div>
-                                        <IoCaretDownCircleOutline size={20} />
+                                        <IoCaretDownCircleOutline size={20} className={"ml-[45px]"}/>
                                     </div>
                                     <div className={"flex flex-row"}>
                                         {/*Bus (Line) Layer*/}
-                                        <div className={"relative w-10 mt-[12px] ml-5 mr-[-15px]"}>
-                                            {buses.map(bus => {
-                                                if (bus.pos === idx.toString() + ".5") return (
-                                                    <FaBus key={idx} style={{ color: getColor(route.type) }}/>
-                                                );
-                                            })}
+                                        <div className={"absolute flex flex-col justify-start items-center w-10 mt-[12px]"}>
+                                            {getBus(idx.toString() + ".5")}
                                         </div>
                                         {idx < stations.length - 1 ? (
                                             <div
                                                 className={
-                                                    "w-1.5 h-11 bg-gray-400 mt-[-2px] mb-[-5px] ml-[6.6px]"
+                                                    "w-1.5 h-11 bg-gray-400 mt-[-2px] mb-[-5px] ml-13"
                                                 }
                                             ></div>
                                         ) : (
                                             <div
                                                 className={
-                                                    "w-1.5 h-11 mt-[-2px] mb-[-2px]"
+                                                    "w-1.5 h-11 mt-[-2px] mb-[-2px] ml-13"
                                                 }
                                             ></div>
                                         )}
