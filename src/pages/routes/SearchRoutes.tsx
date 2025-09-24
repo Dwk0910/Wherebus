@@ -89,6 +89,7 @@ export default function SearchRoutes() {
                                     {item.route_name
                                         .split("")
                                         .map((item_str, idx) => {
+                                            // eslint-disable-next-line no-control-regex
                                             if (/^[\x00-\x7F]+$/.test(item_str))
                                                 if (
                                                     item.route_name.length > 4
