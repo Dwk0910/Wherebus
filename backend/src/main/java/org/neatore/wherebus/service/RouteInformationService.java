@@ -117,7 +117,7 @@ public class RouteInformationService {
                     result.put("type", response.get("routeType"));
                     result.put("route_name", response.get("busRouteNm"));
                     result.put("route_id", response.get("busRouteId"));
-                    result.put("corpNm", response.get("corpNm"));
+                    result.put("corpNm", response.get("corpNm").toString().split(" ")[0]);
                     result.put("start", response.get("stStationNm"));
                     result.put("end", response.get("edStationNm"));
                     result.put("length", response.get("length"));
