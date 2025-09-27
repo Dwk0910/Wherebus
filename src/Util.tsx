@@ -13,6 +13,10 @@ export interface Route {
 }
 
 export interface Station {
+    seq: number;
+    direction: string;
+    gpsX: string;
+    gpsY: string;
     stationNm: string;
     transYn: string;
     arsId: number;

@@ -48,6 +48,7 @@ public record Route(String route_id, String route_name, String corpName, String 
             stationMap.put("transYn", station.transYn());
             stationMap.put("gpsX", station.gpsX());
             stationMap.put("gpsY", station.gpsY());
+            stationMap.put("seq", station.seq());
             stationsList.add(stationMap);
         }
         return stationsList;
