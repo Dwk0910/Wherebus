@@ -1,12 +1,16 @@
 package org.neatore.wherebus.object;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public record Route(String route_id, String route_name, String corpName, String start, String end, String term,
-                    String length, String type) {
-    public Map<String, String> toMap() {
-        final Map<String, String> result = new HashMap<>();
+                    String length, String type, List<Station> stations) {
+    public Map<String, Object> toMap() {
+        final Map<String, Object> result = new HashMap<>();
         result.put("route_id", route_id);
         result.put("route_name", route_name);
         result.put("corpName", corpName);
@@ -15,12 +19,38 @@ public record Route(String route_id, String route_name, String corpName, String 
         result.put("term", term);
         result.put("length", length);
         result.put("type", switch (type) {
+            case "1" -> "공항버스";
+            case "2" -> "마을버스";
             case "3" -> "간선버스";
             case "4" -> "지선버스";
             case "5" -> "순환버스";
             case "6" -> "광역버스";
+            case "7" -> "인천";
+            case "8" -> "경기";
+            case "9" -> "폐지";
+            case "0" -> "공용";
             default -> null;
         });
+
+        List<Map<String, Object>> stationsList = getStations();
+
+        result.put("stations", stationsList);
         return result;
+    }
+
+    private @NotNull List<Map<String, Object>> getStations() {
+        List<Map<String, Object>> stationsList = new ArrayList<>();
+        for (Station station : stations) {
+            final Map<String, Object> stationMap = new HashMap<>();
+            stationMap.put("arsId", station.arsId());
+            stationMap.put("direction", station.direction());
+            stationMap.put("stationNm", station.stationNm());
+            stationMap.put("transYn", station.transYn());
+            stationMap.put("gpsX", station.gpsX());
+            stationMap.put("gpsY", station.gpsY());
+            stationMap.put("seq", station.seq());
+            stationsList.add(stationMap);
+        }
+        return stationsList;
     }
 }
