@@ -78,7 +78,7 @@ public class RouteInformationService {
         dat폴더 안에는 data.go.kr 노선정보조회 Open API 내용 중 getRouteInfoItem의 결과를 JSON으로 변형하여 넣고,
         data_at과 stations 필드를 만들어서 data_at에서는 현재 밀리초 기재, stations필드에는 getStationsByRouteList 결과를 JSON(Array)으로 변형하여 저장.
 
-        data_at 값을 비교하여 이틀(172_800_000L)이 지나면 자동 갱신
+        data_at 값을 비교하여 7일(604_800_000L)이 지나면 자동 갱신
          */
 
         // Create new path and file instances
@@ -103,7 +103,7 @@ public class RouteInformationService {
                 final JSONObject result = new JSONObject();
 
                 // Get basic route info (base of result object)
-                URL url = new URI("http://ws.bus.go.kr/api/rest/busRouteInfo/getRouteInfo?serviceKey=%s&busRouteId=%s".formatted(System.getenv("WHEREBUS_APIKEY_DATAORKR"), route_id)).toURL();
+                URL url = new URI("http://ws.bus.go.kr/api/rest/busRouteInfo/getRouteInfo?serviceKey=%s&busRouteId=%s".formatted(System.getenv("WHEREBUS_APIKEY_DATAGOKR"), route_id)).toURL();
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream()))) {
 
                     JSONObject o_resp = XML.toJSONObject(reader);
@@ -125,10 +125,21 @@ public class RouteInformationService {
                 }
 
                 // Get stations
-                url = new URI("http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute?serviceKey=%s&busRouteId=%s".formatted(System.getenv("WHEREBUS_APIKEY_DATAORKR"), route_id)).toURL();
+                url = new URI("http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute?serviceKey=%s&busRouteId=%s".formatted(System.getenv("WHEREBUS_APIKEY_DATAGOKR"), route_id)).toURL();
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream()))) {
                     JSONArray stations = XML.toJSONObject(reader).getJSONObject("ServiceResult").getJSONObject("msgBody").getJSONArray("itemList");
-                    result.put("stations", stations);
+
+                    int i = 0;
+                    JSONArray newStations = new JSONArray();
+                    for (Object station : stations) {
+                        JSONObject station_obj = new JSONObject(station.toString());
+                        station_obj.put("seq", i);
+                        i++;
+
+                        newStations.put(station_obj);
+                    }
+
+                    result.put("stations", newStations);
                 }
 
                 // Write time
@@ -157,12 +168,13 @@ public class RouteInformationService {
 
         // check if the file is valid
         if (!no_result.get()) {
-            if (System.currentTimeMillis() - obj.get().getLong("data_at") > 172_800_000L) update.run();
+            if (System.currentTimeMillis() - obj.get().getLong("data_at") > 604_800_000L) update.run();
 
             final List<Station> stations = new ArrayList<>();
             for (Object o : obj.get().getJSONArray("stations")) {
                 JSONObject stn_obj = new JSONObject(o.toString());
                 stations.add(new Station(
+                        stn_obj.getInt("seq"),
                         stn_obj.get("arsId").toString(),
                         stn_obj.get("direction").toString(),
                         stn_obj.get("stationNm").toString(),
@@ -184,5 +196,11 @@ public class RouteInformationService {
                     stations
             );
         } else return null;
+    }
+
+    private JSONObject response;
+
+    public List<Map<String, Object>> getLiveBus(String routeId) {
+        return new ArrayList<>();
     }
 }
