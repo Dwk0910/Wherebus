@@ -63,4 +63,9 @@ public class RteController {
 
         return ResponseEntity.ok(result.toList());
     }
+
+    @PostMapping("/route/getLiveBus")
+    public ResponseEntity<@NotNull List<Map<String, Object>>> getLiveBus(@RequestParam("routeId") String routeId) {
+        return ResponseEntity.ok(routeInformationService.getLiveBus(routeId));
+    }
 }
