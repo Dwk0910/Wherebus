@@ -1,12 +1,14 @@
-import $ from 'jquery';
+import $ from "jquery";
 
-import { useState } from 'react';
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Topbar from "./component/Topbar";
 
 // pages
 import Main from "./pages/Main";
+import Notice from "./pages/Notice";
+
 import SearchStops from "./pages/stop/SearchStops.tsx";
 import SearchRoutes from "./pages/routes/SearchRoutes.tsx";
 import ViewRoutes from "./pages/routes/ViewRoutes.tsx";
@@ -16,8 +18,8 @@ export default function App() {
     $.ajax({
         type: "GET",
         url: "http://localhost:8080/health",
-    }).then(res => {
-        setResponse(res)
+    }).then((res) => {
+        setResponse(res);
     });
 
     if (response === "OK") {
@@ -27,6 +29,7 @@ export default function App() {
                 <div className={"pt-18 text-white h-full"}>
                     <Routes>
                         <Route index element={<Main />} />
+                        <Route path={"/notice"} element={<Notice />} />
                         <Route
                             path={"/error/404"}
                             element={<span>Error 404</span>}
@@ -34,7 +37,10 @@ export default function App() {
 
                         <Route path={"/stops"} element={<SearchStops />} />
                         <Route path={"/routes"} element={<SearchRoutes />} />
-                        <Route path={"/routes/:routeId"} element={<ViewRoutes />} />
+                        <Route
+                            path={"/routes/:routeId"}
+                            element={<ViewRoutes />}
+                        />
                     </Routes>
                 </div>
             </div>
