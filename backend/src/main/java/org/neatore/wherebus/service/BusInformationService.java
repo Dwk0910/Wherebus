@@ -37,13 +37,16 @@ public class BusInformationService {
                 for (Object o : stations) {
                     JSONObject station = new JSONObject(o.toString());
                     if (!Util.isEmpty(station.getString("plainNo1"))) {
-                        Map<String, Object> stationMap = station.toMap();
                         Map<String, String> newMap = new HashMap<>();
                         newMap.put("plate", station.getString("plainNo1"));
+                        newMap.put("bustype", station.getString("busType1"));
                         newMap.put("arrmsg", station.getString("arrmsg1"));
                         newMap.put("currentstop", station.getString("stNm1"));
-                        
-                        buses.put(station.get("plainNo1").toString(), );
+                        newMap.put("brdrdetype", station.getString("brdrde_Div1"));
+                        newMap.put("brdrde", station.getString("brdrde_Num1"));
+                        newMap.put("islast", station.getString("isLast1"));
+
+                        buses.put(station.get("plainNo1").toString(), newMap);
                     }
                 }
             }
