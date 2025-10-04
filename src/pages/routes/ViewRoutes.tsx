@@ -1,12 +1,12 @@
 import { type JSX, type ReactNode, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { type Route, type Station, getRouteById } from "../../Util";
+import { type Route, type Station, getRouteById, getBus } from "../../Util";
 
 import RouteTypeTag, { getColor } from "../../component/RouteTypeTag";
 
 import { IoCaretDownCircleOutline } from "react-icons/io5";
-import { FaBus } from 'react-icons/fa';
+import { FaBus } from "react-icons/fa";
 
 interface Bus {
     pos: string;
@@ -20,7 +20,7 @@ export default function ViewRoutes() {
     const [stations, setStations] = useState<Array<Station>>([]);
     const [buses, setBuses] = useState<Array<Bus>>([]);
 
-    const getBus = (idx: string): JSX.Element | "" => {
+    const getBusElement = (idx: string): JSX.Element | "" => {
         for (const bus of buses) {
             if (bus.pos === idx) {
                 return (
@@ -37,8 +37,7 @@ export default function ViewRoutes() {
             }
         }
         return "";
-    }
-
+    };
 
     useEffect(() => {
         // Register route info
@@ -51,15 +50,18 @@ export default function ViewRoutes() {
         });
 
         // TODO: Scheduler for live bus info
+        getBus(routeId as string).then((res) => {
+            console.log(res);
+        });
 
         // **TEST**
-        setBuses([{
-            pos: "0.5",
-            plate: "서울74아1275"
-        }, {
-            pos: "5",
-            plate: "서울74사2577"
-        }])
+        // setBuses([{
+        //     pos: "0.5",
+        //     plate: "서울74아1275"
+        // }, {
+        //     pos: "5",
+        //     plate: "서울74사2577"
+        // }])
     }, [routeId]);
 
     let content: ReactNode;
@@ -143,53 +145,81 @@ export default function ViewRoutes() {
                     </div>
 
                     {/* MAIN AREA */}
-                    {stations.length !== 0 ? stations.map((item, idx) => {
-                        return (
-                            <div
-                                className={"relative flex flex-row items-center"}
-                                key={idx}
-                            >
-
-                                {/*Line&Circle Layer*/}
-                                <div className={"flex flex-col items-start"}>
-                                    <div className={"flex flex-row"}>
-                                        {/*Bus (Station) Layer*/}
-                                        <div className={"absolute flex flex-col justify-start items-center w-10 mt-0.5"}>
-                                            {getBus(idx.toString())}
-                                        </div>
-                                        <IoCaretDownCircleOutline size={20} className={"ml-[45px]"}/>
-                                    </div>
-                                    <div className={"flex flex-row"}>
-                                        {/*Bus (Line) Layer*/}
-                                        <div className={"absolute flex flex-col justify-start items-center w-10 mt-[12px]"}>
-                                            {getBus(idx.toString() + ".5")}
-                                        </div>
-                                        {idx < stations.length - 1 ? (
+                    {stations.length !== 0 ? (
+                        stations.map((item, idx) => {
+                            return (
+                                <div
+                                    className={
+                                        "relative flex flex-row items-center"
+                                    }
+                                    key={idx}
+                                >
+                                    {/*Line&Circle Layer*/}
+                                    <div
+                                        className={"flex flex-col items-start"}
+                                    >
+                                        <div className={"flex flex-row"}>
+                                            {/*Bus (Station) Layer*/}
                                             <div
                                                 className={
-                                                    "w-1.5 h-11 bg-gray-400 mt-[-2px] mb-[-5px] ml-13"
+                                                    "absolute flex flex-col justify-start items-center w-10 mt-0.5"
                                                 }
-                                            ></div>
-                                        ) : (
+                                            >
+                                                {getBusElement(idx.toString())}
+                                            </div>
+                                            <IoCaretDownCircleOutline
+                                                size={20}
+                                                className={"ml-[45px]"}
+                                            />
+                                        </div>
+                                        <div className={"flex flex-row"}>
+                                            {/*Bus (Line) Layer*/}
                                             <div
                                                 className={
-                                                    "w-1.5 h-11 mt-[-2px] mb-[-2px] ml-13"
+                                                    "absolute flex flex-col justify-start items-center w-10 mt-[12px]"
                                                 }
-                                            ></div>
-                                        )}
+                                            >
+                                                {getBusElement(
+                                                    idx.toString() + ".5"
+                                                )}
+                                            </div>
+                                            {idx < stations.length - 1 ? (
+                                                <div
+                                                    className={
+                                                        "w-1.5 h-11 bg-gray-400 mt-[-2px] mb-[-5px] ml-13"
+                                                    }
+                                                ></div>
+                                            ) : (
+                                                <div
+                                                    className={
+                                                        "w-1.5 h-11 mt-[-2px] mb-[-2px] ml-13"
+                                                    }
+                                                ></div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/*Content Layer*/}
+                                    <div className={"h-15 ml-3 flex flex-col"}>
+                                        <span
+                                            className={
+                                                "font-SeoulNamsan font-bold text-nowrap max-w-50"
+                                            }
+                                        >
+                                            {item.stationNm}
+                                        </span>
+                                        <span
+                                            className={
+                                                "font-SeoulNamsan text-gray-400"
+                                            }
+                                        >
+                                            {item.arsId}
+                                        </span>
                                     </div>
                                 </div>
-
-                                {/*Content Layer*/}
-                                <div className={"h-15 ml-3 flex flex-col"}>
-                                    <span className={"font-SeoulNamsan font-bold text-nowrap max-w-50"}>
-                                        {item.stationNm}
-                                    </span>
-                                    <span className={"font-SeoulNamsan text-gray-400"}>{item.arsId}</span>
-                                </div>
-                            </div>
-                        );
-                    }) : (
+                            );
+                        })
+                    ) : (
                         <div>경로를 불러오는 중입니다...</div>
                     )}
                 </div>
