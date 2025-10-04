@@ -1,46 +1,98 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { type JSX, type ReactNode, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { type Route, getRouteById } from "../../Util";
+import { type Route, type Station, getRouteById, getBus } from "../../Util";
 
-import RouteTypeTag from "../../component/RouteTypeTag";
+import RouteTypeTag, { getColor } from "../../component/RouteTypeTag";
+
+import { IoCaretDownCircleOutline } from "react-icons/io5";
+import { FaBus } from "react-icons/fa";
+
+interface Bus {
+    pos: string;
+    plate: string;
+}
 
 export default function ViewRoutes() {
     const { routeId } = useParams();
-    const [routeInfo, setRouteInfo] = useState<Route | null | undefined>(null);
+
+    const [route, setRoute] = useState<Route | null | undefined>(null);
+    const [stations, setStations] = useState<Array<Station>>([]);
+    const [buses, setBuses] = useState<Array<Bus>>([]);
+
+    const getBusElement = (idx: string): JSX.Element | "" => {
+        for (const bus of buses) {
+            if (bus.pos === idx) {
+                return (
+                    <>
+                        <FaBus
+                            key={idx}
+                            style={{ color: getColor(route!.type) }}
+                        />
+                        <div className={"text-[0.7rem]"}>
+                            {bus.plate.match(/.(\d+)$/)![1]}
+                        </div>
+                    </>
+                );
+            }
+        }
+        return "";
+    };
 
     useEffect(() => {
+        // Register route info
         getRouteById(routeId as string).then((res) => {
-            if (res === null) setRouteInfo(undefined);
-            setRouteInfo(res);
+            if (res === null) setRoute(undefined);
+            else {
+                setRoute(res);
+                setStations(res.stations);
+            }
         });
-    }, []);
+
+        // TODO: Scheduler for live bus info
+        getBus(routeId as string).then((res) => {
+            console.log(res);
+        });
+
+        // **TEST**
+        // setBuses([{
+        //     pos: "0.5",
+        //     plate: "서울74아1275"
+        // }, {
+        //     pos: "5",
+        //     plate: "서울74사2577"
+        // }])
+    }, [routeId]);
 
     let content: ReactNode;
 
-    if (routeInfo === undefined) window.location.assign("/error/404");
-    else if (routeInfo) {
+    if (route === undefined) window.location.assign("/error/404");
+    else if (route) {
         content = (
             <div className={"w-full flex flex-col px-4"}>
                 <div
                     className={
-                        "w-full h-10 mt-1 flex flex-row justify-start items-center pt-7"
+                        "w-full h-15 mt-1 pl-5 flex flex-row justify-start items-center pt-13 pb-10"
                     }
                 >
-                    <RouteTypeTag type={routeInfo.type} />
+                    <RouteTypeTag type={route.type} />
                     <span className={"font-suite text-4xl ml-3"}>
-                        {routeInfo.route_name}
+                        {route.route_name}
                     </span>
                 </div>
-                <div>
+                <div
+                    className={
+                        "grow mb-6 overflow-y-auto overflow-x-auto scrollbar scrollbar-thumb-neutral-600 [&::-webkit-scrollbar]:[width:6px] [&::-webkit-scrollbar]:[height:6px]"
+                    }
+                >
                     {/* INFO AREA */}
-                    <div className={"flex flex-col mt-6 ml-5"}>
+                    <div className={"flex flex-col my-6 ml-5"}>
                         <span
                             className={
                                 "text-neutral-200 font-suite text-[1.1rem]"
                             }
                         >
-                            {routeInfo.corpName}
+                            {route.corpName}
                         </span>
                         <span className={"flex flex-row mt-3"}>
                             <span className={"font-suite text-gray-400 w-17"}>
@@ -51,7 +103,7 @@ export default function ViewRoutes() {
                                     "text-gray-300 font-suite text-[1.1rem]"
                                 }
                             >
-                                {routeInfo.start}
+                                {route.start}
                             </span>
                         </span>
                         <span className={"flex flex-row"}>
@@ -63,7 +115,7 @@ export default function ViewRoutes() {
                                     "text-gray-300 font-suite text-[1.1rem]"
                                 }
                             >
-                                {routeInfo.end}
+                                {route.end}
                             </span>
                         </span>
                         <span className={"flex flex-row"}>
@@ -75,7 +127,7 @@ export default function ViewRoutes() {
                                     "text-gray-300 font-suite text-[1.1rem]"
                                 }
                             >
-                                {routeInfo.length}km
+                                {route.length}km
                             </span>
                         </span>
                         <span className={"flex flex-row"}>
@@ -87,12 +139,89 @@ export default function ViewRoutes() {
                                     "text-gray-300 font-suite text-[1.1rem]"
                                 }
                             >
-                                {routeInfo.term}분
+                                {route.term}분
                             </span>
                         </span>
                     </div>
 
                     {/* MAIN AREA */}
+                    {stations.length !== 0 ? (
+                        stations.map((item, idx) => {
+                            return (
+                                <div
+                                    className={
+                                        "relative flex flex-row items-center"
+                                    }
+                                    key={idx}
+                                >
+                                    {/*Line&Circle Layer*/}
+                                    <div
+                                        className={"flex flex-col items-start"}
+                                    >
+                                        <div className={"flex flex-row"}>
+                                            {/*Bus (Station) Layer*/}
+                                            <div
+                                                className={
+                                                    "absolute flex flex-col justify-start items-center w-10 mt-0.5"
+                                                }
+                                            >
+                                                {getBusElement(idx.toString())}
+                                            </div>
+                                            <IoCaretDownCircleOutline
+                                                size={20}
+                                                className={"ml-[45px]"}
+                                            />
+                                        </div>
+                                        <div className={"flex flex-row"}>
+                                            {/*Bus (Line) Layer*/}
+                                            <div
+                                                className={
+                                                    "absolute flex flex-col justify-start items-center w-10 mt-[12px]"
+                                                }
+                                            >
+                                                {getBusElement(
+                                                    idx.toString() + ".5"
+                                                )}
+                                            </div>
+                                            {idx < stations.length - 1 ? (
+                                                <div
+                                                    className={
+                                                        "w-1.5 h-11 bg-gray-400 mt-[-2px] mb-[-5px] ml-13"
+                                                    }
+                                                ></div>
+                                            ) : (
+                                                <div
+                                                    className={
+                                                        "w-1.5 h-11 mt-[-2px] mb-[-2px] ml-13"
+                                                    }
+                                                ></div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/*Content Layer*/}
+                                    <div className={"h-15 ml-3 flex flex-col"}>
+                                        <span
+                                            className={
+                                                "font-SeoulNamsan font-bold text-nowrap max-w-50"
+                                            }
+                                        >
+                                            {item.stationNm}
+                                        </span>
+                                        <span
+                                            className={
+                                                "font-SeoulNamsan text-gray-400"
+                                            }
+                                        >
+                                            {item.arsId}
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <div>경로를 불러오는 중입니다...</div>
+                    )}
                 </div>
             </div>
         );
