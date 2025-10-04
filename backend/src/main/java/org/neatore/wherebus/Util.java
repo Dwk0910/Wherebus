@@ -18,6 +18,11 @@ public class Util {
         }
     }
 
+    public static boolean isEmpty(String str) {
+        if (str == null) return true;
+        return str.codePoints().allMatch(cp -> Character.isWhitespace(cp) || Character.isSpaceChar(cp));
+    }
+
     public static <T> T getContent(String fileName, Class<T> returnType) {
         File f = new File(Wherebus.dataFolder + File.separator + fileName);
         if (!f.exists()) throw new IllegalArgumentException("File " + fileName + " does not exist.");
