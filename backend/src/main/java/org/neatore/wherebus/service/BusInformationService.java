@@ -1,5 +1,6 @@
 package org.neatore.wherebus.service;
 
+import org.json.JSONException;
 import org.neatore.wherebus.Wherebus;
 
 import org.springframework.stereotype.Service;
@@ -19,33 +20,20 @@ import java.util.Map;
 
 @Service
 public class BusInformationService {
+    public Map<String, Object> getBus(String busId) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URI("http://ws.bus.go.kr/api/rest/buspos/getBusPosByVehId?serviceKey=%s&vehId=%s".formatted(System.getenv("WHEREBUS_APIKEY_DATAGOKR"), busId)).toURL().openConnection().getInputStream()))) {
+            JSONObject response_ = XML.toJSONObject(reader);
+            JSONObject response = response_.getJSONObject("ServiceResult").getJSONObject("msgBody").getJSONObject("itemList");
+            return response.toMap();
+        } catch (IOException | URISyntaxException e) {
+            Wherebus.LOGGER.error(e.toString());
+        } catch (JSONException e) {
+            return null;
+        }
+        return null;
+    }
+
     public Map<String, Object> getBuses(String route_id) {
-//        try {
-//            // TODO: Change API to http://ws.bus.go.kr/api/rest/buspos/getBusPosByRouteSt
-//            URL url = new URI("http://ws.bus.go.kr/api/rest/arrive/getArrInfoByRouteAll?serviceKey=%s&busRouteId=%s".formatted(System.getenv("WHEREBUS_APIKEY_DATAGOKR"), route_id)).toURL();
-//            try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream()))) {
-//                JSONObject response = XML.toJSONObject(reader);
-//                JSONArray stations = response.getJSONObject("ServiceResult").getJSONObject("msgBody").getJSONArray("itemList");
-//                for (Object o : stations) {
-//                    JSONObject station = new JSONObject(o.toString());
-//                    if (!Util.isEmpty(station.getString("plainNo1"))) {
-//                        Map<String, Object> newMap = new HashMap<>();
-//                        newMap.put("id", station.get("vehId1"));
-//                        newMap.put("plate", station.get("plainNo1"));
-//                        newMap.put("bustype", station.get("busType1"));
-//                        newMap.put("nextstop", station.get("nstnId1"));
-//                        newMap.put("inftype", station.get("rerdie_Div1"));
-//                        newMap.put("inf", station.get("reride_Num1"));
-//                        newMap.put("islast", Integer.parseInt(station.get("isLast1").toString()) == 1);
-//                        newMap.put("isarrive", station.get("isArrive1"));
-//
-//                        buses.put(station.get("plainNo1").toString(), newMap);
-//                    }
-//                }
-//            }
-//        } catch (IOException | URISyntaxException e) {
-//            Wherebus.LOGGER.error(e.toString());
-//        }
         JSONObject response = getBuses_(route_id);
         return response.toMap();
     }

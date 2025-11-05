@@ -20,7 +20,12 @@ public class BusController {
     }
 
     @PostMapping("/getBus")
-    public ResponseEntity<@NotNull Map<String, Object>> getBus(@RequestParam("routeId") String route_id) {
+    public ResponseEntity<@NotNull Map<String, Object>> getBus(@RequestParam("busId") String busId) {
+        return ResponseEntity.ok(busInformationService.getBus(busId));
+    }
+
+    @PostMapping("/getBuses")
+    public ResponseEntity<@NotNull Map<String, Object>> getBuses(@RequestParam("routeId") String route_id) {
         return ResponseEntity.ok(busInformationService.getBuses(route_id));
     }
 }

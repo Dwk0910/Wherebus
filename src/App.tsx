@@ -12,6 +12,8 @@ import Notice from "./pages/Notice";
 import SearchStops from "./pages/stop/SearchStops.tsx";
 import SearchRoutes from "./pages/routes/SearchRoutes.tsx";
 import ViewRoutes from "./pages/routes/ViewRoutes.tsx";
+import SearchBus from "./pages/bus/SearchBus.tsx";
+import BusDetail from "./pages/bus/BusDetail.tsx";
 
 export default function App() {
     const [response, setResponse] = useState<string | null>(null);
@@ -35,6 +37,11 @@ export default function App() {
                             element={<span>Error 404</span>}
                         />
 
+                        <Route path={"/searchbus"} element={<SearchBus />} />
+                        <Route
+                            path={"/busdetail/:busId"}
+                            element={<BusDetail />}
+                        />
                         <Route path={"/stops"} element={<SearchStops />} />
                         <Route path={"/routes"} element={<SearchRoutes />} />
                         <Route

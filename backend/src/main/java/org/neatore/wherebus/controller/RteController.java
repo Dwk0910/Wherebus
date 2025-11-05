@@ -37,9 +37,9 @@ public class RteController {
 
     @PostMapping("/searchRoute")
     public ResponseEntity<@NotNull List<Object>> get(@RequestParam("query") String query) {
+        // TODO: 서버 과부하 방지 : 검색 결과가 10개 이상인 경우 {more: true} 로 만들고 한 번에 10개씩만 검색 가능하도록 만들기. (API의 start, end 값 활용)
+
         /*
-        TODO: API요청은 맨 마지막에 작성
-        TODO: http://openapi.seoul.go.kr:8088/{Service Key}/json/busRoute/1/1000
         각 API에 요청 한 번씩만 넣어보고 데이터 두, 세개만 받아서 작업 -> 이후 연동테스트
         (개발시에는 API이용횟수 제한이 걸려있음)
          */

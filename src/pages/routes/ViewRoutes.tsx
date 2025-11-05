@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { clsx } from "clsx";
 
-import { type Route, type Station, getRouteById, getBus } from "../../Util";
+import { type Route, type Station, getRouteById, getBuses } from "../../Util";
 
 import RouteTypeTag, { getColor } from "../../component/RouteTypeTag";
 
@@ -18,6 +18,7 @@ interface Bus {
 }
 
 export default function ViewRoutes() {
+    // TODO: 시간표 업로드 시스템
     const { routeId } = useParams();
 
     const [route, setRoute] = useState<Route | null | undefined>(null);
@@ -26,7 +27,7 @@ export default function ViewRoutes() {
     const [lastRefresh, setLastRefresh] = useState<string>("");
 
     const refreshBus = async () => {
-        await getBus(routeId as string).then((data: Object) => {
+        await getBuses(routeId as string).then((data: Object) => {
             let busList: Array<Bus> = [];
             for (const [_, v] of Object.entries(data)) {
                 busList.push({

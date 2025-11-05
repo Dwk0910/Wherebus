@@ -40,9 +40,18 @@ export const getStations = async (routeId: string): Promise<Array<Station>> => {
     });
 };
 
-export const getBus = async (routeId: string): Promise<string> => {
+export const getBus = async (busId: string): Promise<any> => {
     return $.ajax({
         url: "http://localhost:8080/getBus",
+        method: "POST",
+        data: { busId },
+        dataType: "json",
+    });
+};
+
+export const getBuses = async (routeId: string): Promise<string> => {
+    return $.ajax({
+        url: "http://localhost:8080/getBuses",
         method: "POST",
         data: { routeId },
         dataType: "json",
