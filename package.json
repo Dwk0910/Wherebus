@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/cli": "^4.1.13",
     "@tailwindcss/vite": "^4.1.13",
+    "@uiw/react-md-editor": "^4.0.8",
     "clsx": "^2.1.1",
     "jquery": "^3.7.1",
     "react": "^19.1.1",

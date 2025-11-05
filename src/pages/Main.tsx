@@ -1,9 +1,51 @@
+import { useState, useEffect } from "react";
+import $ from "jquery";
+
 import { clsx } from "clsx";
+import { type Notice } from "./Notice";
 import isometric from "../assets/images/isometric.png";
+import { AiTwotoneNotification } from "react-icons/ai";
 
 export default function Main() {
+    const [notice, setNotice] = useState<Notice | null>(null);
+
+    useEffect(() => {
+        $.ajax({
+            url: "http://localhost:8080/notification",
+            method: "GET",
+        }).then((res) => {
+            if (res.status !== "notfound") setNotice(res);
+        });
+    }, []);
+
     return (
         <div className={"flex flex-col h-full"}>
+            {notice ? (
+                <div
+                    className={
+                        "mt-3 mx-3.5 p-1 px-3 rounded-[7px] bg-gray-600 flex items-center h-10 cursor-pointer"
+                    }
+                    onClick={() => window.location.assign("/notice")}
+                >
+                    <AiTwotoneNotification size={20} />
+                    <div
+                        className={
+                            "mx-3 font-suite bg-red-400 rounded-[4px] w-13 flex justify-center"
+                        }
+                    >
+                        공지
+                    </div>
+                    <span
+                        className={
+                            "font-suite overflow-hidden text-ellipsis whitespace-nowrap grow"
+                        }
+                    >
+                        {notice.title}
+                    </span>
+                </div>
+            ) : (
+                ""
+            )}
             <div className={"w-full flex justify-center slideIn"}>
                 <img src={isometric} alt={"des"} className={"w-79"} />
             </div>

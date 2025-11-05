@@ -1,15 +1,21 @@
 import $ from "jquery";
-
-import { type Route } from "../../Util";
-
 import RouteTypeTag from "../../component/RouteTypeTag.tsx";
 
 import { useState } from "react";
 import { clsx } from "clsx";
 
+interface BasicRouteInfo {
+    route_id: number;
+    route_name: string;
+    type: string;
+    term: number;
+    start: string;
+    end: string;
+}
+
 export default function SearchRoutes() {
     const [searchInput, setSearchInput] = useState<string>("");
-    const [routes, setRoutes] = useState<Array<Route>>([]);
+    const [routes, setRoutes] = useState<Array<BasicRouteInfo>>([]);
 
     const search: (query: string) => void = (query) => {
         $.ajax({
@@ -53,7 +59,7 @@ export default function SearchRoutes() {
             </div>
             <div className={"flex flex-col items-center py-5"}>
                 {routes &&
-                    routes.map((item: Route, idx: number) => (
+                    routes.map((item: BasicRouteInfo, idx: number) => (
                         <div
                             key={idx}
                             className={clsx(
@@ -83,6 +89,7 @@ export default function SearchRoutes() {
                                     {item.route_name
                                         .split("")
                                         .map((item_str, idx) => {
+                                            // eslint-disable-next-line no-control-regex
                                             if (/^[\x00-\x7F]+$/.test(item_str))
                                                 if (
                                                     item.route_name.length > 4
