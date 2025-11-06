@@ -49,6 +49,7 @@ public class BusInformationService {
                 generated.put("id", bus.get("vehId"));
                 generated.put("plate", bus.get("plainNo"));
                 generated.put("bustype", bus.get("busType"));
+                generated.put("route", routeId);
                 generated.put("nextStop", bus.get("nextStId"));
                 generated.put("sectpos", (bus.getInt("sectOrd") - 1) + (bus.get("stopFlag").toString().equals("0") ? ".5" : ""));
                 result.put(generated.get("id").toString(), generated);

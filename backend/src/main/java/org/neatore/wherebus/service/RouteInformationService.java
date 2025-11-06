@@ -197,10 +197,4 @@ public class RouteInformationService {
             );
         } else return null;
     }
-
-    private JSONObject response;
-
-    public List<Map<String, Object>> getLiveBus(String routeId) {
-        return new ArrayList<>();
-    }
 }
