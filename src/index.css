@@ -20,6 +20,15 @@
     font-family: "suite", "monospace";
 }
 
+@font-face {
+    font-family: "hyhead"; /* 고유한 이름으로 테스트 */
+    src: url("./assets/fonts/hyheadline.woff2") format("woff2");
+}
+
+.font-hyhead {
+    font-family: "hyhead", "monospace";
+}
+
 /* Main page: slidein animations */
 @keyframes slideIn {
     0% {
