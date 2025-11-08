@@ -47,7 +47,7 @@ export default function BusDetail() {
             <div className={"flex flex-col w-full items-center"}>
                 <div
                     className={
-                        "w-110 h-100 border-gray-400 border-3 rounded-[10px] mt-5 relative"
+                        "w-[90%] max-w-110 h-100 border-gray-400 border-3 rounded-[10px] mt-5 relative"
                     }
                 >
                     <div
@@ -93,9 +93,9 @@ export default function BusDetail() {
                                 <div className={"text-[2.3rem] ml-1.5"}>
                                     {busInfo.plate_3.split("").map((v, idx) => {
                                         return idx === 0 ? (
-                                            <span>{v}</span>
+                                            <span key={idx}>{v}</span>
                                         ) : (
-                                            <span className={"ml-0.5"}>
+                                            <span className={"ml-0.5"} key={idx}>
                                                 {v}
                                             </span>
                                         );
