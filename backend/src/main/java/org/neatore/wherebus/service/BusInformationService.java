@@ -1,10 +1,10 @@
 package org.neatore.wherebus.service;
 
-import org.json.JSONException;
 import org.neatore.wherebus.Wherebus;
 
 import org.springframework.stereotype.Service;
 
+import org.json.JSONException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
@@ -17,6 +17,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class BusInformationService {
@@ -40,8 +41,9 @@ public class BusInformationService {
 
     private JSONObject getBuses_(String routeId) {
         final JSONObject result = new JSONObject();
+        JSONObject response_ = null;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URI("http://ws.bus.go.kr/api/rest/buspos/getBusPosByRtid?serviceKey=%s&busRouteId=%s".formatted(System.getenv("WHEREBUS_APIKEY_DATAGOKR"), routeId)).toURL().openConnection().getInputStream()))) {
-            JSONObject response_ = XML.toJSONObject(reader);
+            response_ = XML.toJSONObject(reader);
             JSONArray response = response_.getJSONObject("ServiceResult").getJSONObject("msgBody").getJSONArray("itemList");
             for (Object o : response) {
                 JSONObject bus = new JSONObject(o.toString());
@@ -56,6 +58,8 @@ public class BusInformationService {
             }
         } catch (URISyntaxException | IOException e) {
             Wherebus.LOGGER.error(e.toString());
+        } catch (JSONException e) {
+            Wherebus.LOGGER.error(Objects.requireNonNull(response_).toString(4));
         }
         return result;
     }

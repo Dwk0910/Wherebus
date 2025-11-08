@@ -103,6 +103,7 @@ public class RouteInformationService {
                 final JSONObject result = new JSONObject();
 
                 // Get basic route info (base of result object)
+                String serviceResult = null;
                 URL url = new URI("http://ws.bus.go.kr/api/rest/busRouteInfo/getRouteInfo?serviceKey=%s&busRouteId=%s".formatted(System.getenv("WHEREBUS_APIKEY_DATAGOKR"), route_id)).toURL();
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream()))) {
 
@@ -113,6 +114,8 @@ public class RouteInformationService {
                         return;
                     }
 
+                    serviceResult = o_resp.toString(4);
+
                     JSONObject response = o_resp.getJSONObject("ServiceResult").getJSONObject("msgBody").getJSONObject("itemList");
                     result.put("type", response.get("routeType"));
                     result.put("route_name", response.get("busRouteNm"));
@@ -122,12 +125,18 @@ public class RouteInformationService {
                     result.put("end", response.get("edStationNm"));
                     result.put("length", response.get("length"));
                     result.put("term", response.get("term"));
+                } catch (JSONException e) {
+                    Wherebus.LOGGER.error(serviceResult);
                 }
 
                 // Get stations
                 url = new URI("http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute?serviceKey=%s&busRouteId=%s".formatted(System.getenv("WHEREBUS_APIKEY_DATAGOKR"), route_id)).toURL();
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream()))) {
-                    JSONArray stations = XML.toJSONObject(reader).getJSONObject("ServiceResult").getJSONObject("msgBody").getJSONArray("itemList");
+                    JSONObject resp = XML.toJSONObject(reader);
+                    // for debugging
+                    serviceResult = resp.toString(4);
+
+                    JSONArray stations = resp.getJSONObject("ServiceResult").getJSONObject("msgBody").getJSONArray("itemList");
 
                     int i = 0;
                     JSONArray newStations = new JSONArray();
@@ -140,6 +149,8 @@ public class RouteInformationService {
                     }
 
                     result.put("stations", newStations);
+                } catch (JSONException e) {
+                    Wherebus.LOGGER.error(serviceResult);
                 }
 
                 // Write time
@@ -159,7 +170,9 @@ public class RouteInformationService {
 
         // Read the file & bind
         try {
-            obj.set(new JSONObject(Files.readString(f.toPath())));
+            String data = Files.readString(f.toPath());
+            if (data.isEmpty()) throw new JSONException("");
+            obj.set(new JSONObject(data));
         } catch (JSONException e) {
             update.run();
         } catch (IOException e) {
