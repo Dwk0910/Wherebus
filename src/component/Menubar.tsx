@@ -81,7 +81,7 @@ export default function Menubar({
                 </div>
                 <div
                     className={clsx(
-                        "flex flex-col px-6 mb-6 mr-[5px] h-full",
+                        "flex flex-col px-6 pb-10 mr-[5px] h-full",
                         "overflow-y-scroll scrollbar scrollbar-thumb-neutral-700 scrollbar-hover:scrollbar-thumb-neutral-500",
                         "[&::-webkit-scrollbar]:[width:6px]"
                     )}
@@ -90,7 +90,7 @@ export default function Menubar({
                         <div
                             className={clsx(
                                 "flex flex-row font-suite items-center justify-center scale-110",
-                                "border-neutral-400 border-1 p-3 mt-3 mb-6 rounded-[5px]",
+                                "border-neutral-400 border-1p-3 mt-3 mb-6 rounded-[5px]",
                                 "w-40",
                                 "transition-all duration-200 hover:scale-115 hover:shadow-2xl cursor-pointer"
                             )}
@@ -116,8 +116,8 @@ export default function Menubar({
                             onClick={() => goTo("/stops")}
                         >
                             <GiBusStop className={"text-[3.5rem]"} />
-                            <span className={"text-gray-300"}>
-                                정류소 도착정보
+                            <span className={"text-gray-300 text-center"}>
+                                정류소{(window.innerWidth < 400) ? <br/> : " "}도착정보
                             </span>
                         </div>
                         <div
