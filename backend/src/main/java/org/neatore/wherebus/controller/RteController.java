@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,10 +35,10 @@ public class RteController {
     }
 
     @PostMapping("/searchRoute")
-    public ResponseEntity<@NotNull List<Object>> get(@RequestParam("query") String query) {
+    public ResponseEntity<@NotNull Map<String, Object>> get(@RequestParam("query") String query, @RequestParam(value = "continueFrom", required = false) String continueFrom) {
+        // TODO: 서버 과부하 방지 : 검색 결과가 10개 이상인 경우 {more: true} 로 만들고 한 번에 5개씩만 검색 가능하도록 만들기. (API의 start, end 값 활용)
+
         /*
-        TODO: API요청은 맨 마지막에 작성
-        TODO: http://openapi.seoul.go.kr:8088/{Service Key}/json/busRoute/1/1000
         각 API에 요청 한 번씩만 넣어보고 데이터 두, 세개만 받아서 작업 -> 이후 연동테스트
         (개발시에는 API이용횟수 제한이 걸려있음)
          */
@@ -51,21 +50,33 @@ public class RteController {
 
         if (data.isEmpty()) return ResponseEntity.status(500).build();
 
+        // 5개 이상은 검색을 멈춘다. (과부하 방지)
+        JSONObject header = new JSONObject();
+        int itemCount = 1;
+
         // Search item
-        JSONArray result = new JSONArray();
+        JSONObject result = new JSONObject();
+        JSONArray resultArray = new JSONArray();
         for (Object o : data.getJSONObject("busRoute").getJSONArray("row")) {
+            if (itemCount > 5) {
+                header.put("more", true);
+                break;
+            }
+
             JSONObject obj = new JSONObject(o.toString());
             if (obj.getString("RTE_NM").contains(query)) {
                 Route route = routeInformationService.getRoute(obj.getString("RTE_ID"));
-                if (route != null) result.put(route.toMap());
+                if (route != null) {
+                    resultArray.put(route.toMap());
+                    itemCount++;
+                }
             }
         }
 
-        return ResponseEntity.ok(result.toList());
-    }
+        if (itemCount <= 5) header.put("more", false);
+        result.put("header", header);
+        result.put("body", resultArray);
 
-    @PostMapping("/route/getLiveBus")
-    public ResponseEntity<@NotNull List<Map<String, Object>>> getLiveBus(@RequestParam("routeId") String routeId) {
-        return ResponseEntity.ok(routeInformationService.getLiveBus(routeId));
+        return ResponseEntity.ok(result.toMap());
     }
 }

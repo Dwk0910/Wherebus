@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 
 // icons
-import { FaHome, FaGithub, FaBug } from "react-icons/fa";
+import { FaHome, FaBus, FaGithub, FaBug } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { GiBusStop } from "react-icons/gi";
 import { CiRoute } from "react-icons/ci";
@@ -81,16 +81,16 @@ export default function Menubar({
                 </div>
                 <div
                     className={clsx(
-                        "flex flex-col px-6 mb-6 mr-[5px] h-full",
+                        "flex flex-col px-6 pb-10 mr-[5px] h-full",
                         "overflow-y-scroll scrollbar scrollbar-thumb-neutral-700 scrollbar-hover:scrollbar-thumb-neutral-500",
                         "[&::-webkit-scrollbar]:[width:6px]"
                     )}
                 >
                     <div className={"w-full flex justify-center pb-2"}>
-                        <span
+                        <div
                             className={clsx(
                                 "flex flex-row font-suite items-center justify-center scale-110",
-                                "border-neutral-400 border-1 p-3 mt-3 mb-6 mr-10 rounded-[5px]",
+                                "border-neutral-400 border-1 p-3 mt-3 mb-6 rounded-[5px]",
                                 "w-40",
                                 "transition-all duration-200 hover:scale-115 hover:shadow-2xl cursor-pointer"
                             )}
@@ -98,7 +98,7 @@ export default function Menubar({
                         >
                             <FaHome className={"mr-2"} />
                             홈으로
-                        </span>
+                        </div>
                     </div>
                     <span
                         className={
@@ -116,8 +116,9 @@ export default function Menubar({
                             onClick={() => goTo("/stops")}
                         >
                             <GiBusStop className={"text-[3.5rem]"} />
-                            <span className={"text-gray-300"}>
-                                정류소 도착정보
+                            <span className={"text-gray-300 text-center"}>
+                                정류소{window.innerWidth < 400 ? <br /> : " "}
+                                도착정보
                             </span>
                         </div>
                         <div
@@ -131,6 +132,19 @@ export default function Menubar({
                             <CiRoute className={"text-[3.5rem]"} />
                             <span className={"text-gray-300"}>
                                 노선 도착정보
+                            </span>
+                        </div>
+                        <div
+                            className={clsx(
+                                "w-30 h-30 font-suite flex flex-col justify-center items-center rounded-[15px] border-gray-300 border-1 transition-all duration-200",
+                                "hover:scale-105 hover:shadow-2xl cursor-pointer",
+                                "ml-4"
+                            )}
+                            onClick={() => goTo("/searchbus")}
+                        >
+                            <FaBus className={"text-[2.4rem] mt-2"} />
+                            <span className={"text-gray-300 mt-2.5"}>
+                                버스 정보
                             </span>
                         </div>
                     </div>

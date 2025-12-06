@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { clsx } from "clsx";
 
-import { type Route, type Station, getRouteById, getBus } from "../../Util";
+import { type Route, type Station, getRouteById, getBuses } from "../../Util";
 
 import RouteTypeTag, { getColor } from "../../component/RouteTypeTag";
 
@@ -13,11 +13,13 @@ import { IoCaretDownCircleOutline } from "react-icons/io5";
 import { FaBus } from "react-icons/fa";
 
 interface Bus {
+    id: bigint;
     pos: string;
     plate: string;
 }
 
 export default function ViewRoutes() {
+    // TODO: 시간표 업로드 시스템
     const { routeId } = useParams();
 
     const [route, setRoute] = useState<Route | null | undefined>(null);
@@ -26,10 +28,11 @@ export default function ViewRoutes() {
     const [lastRefresh, setLastRefresh] = useState<string>("");
 
     const refreshBus = async () => {
-        await getBus(routeId as string).then((data: Object) => {
-            let busList: Array<Bus> = [];
+        await getBuses(routeId as string).then((data: object) => {
+            const busList: Array<Bus> = [];
             for (const [_, v] of Object.entries(data)) {
                 busList.push({
+                    id: v["id"],
                     pos: v["sectpos"],
                     plate: v["plate"],
                 });
@@ -53,7 +56,10 @@ export default function ViewRoutes() {
         for (const bus of buses) {
             if (bus.pos === idx) {
                 return (
-                    <>
+                    <div
+                        className={"flex flex-col items-center cursor-pointer"}
+                        onClick={() => window.location.assign(`/BusDetail/${bus.id}`)}
+                    >
                         <FaBus
                             key={idx}
                             style={{ color: getColor(route!.type) }}
@@ -61,7 +67,7 @@ export default function ViewRoutes() {
                         <div className={"text-[0.7rem]"}>
                             {bus.plate.match(/.(\d+)$/)![1]}
                         </div>
-                    </>
+                    </div>
                 );
             }
         }
@@ -78,10 +84,10 @@ export default function ViewRoutes() {
             }
 
             await refreshBus();
-        });
 
-        const interval_refresh = setInterval(refreshBus, 10000);
-        return () => clearInterval(interval_refresh);
+            const interval_refresh = setInterval(refreshBus, 10000);
+            return () => clearInterval(interval_refresh);
+        });
     }, [routeId]);
 
     let content: ReactNode;
@@ -178,6 +184,19 @@ export default function ViewRoutes() {
                                 }
                             >
                                 {route.term}분
+                            </span>
+                        </span>
+                        <span className={"flex flex-row mt-2"}>
+                            <span className={"font-suite text-gray-400 w-17"}>
+                                운행중
+                            </span>
+                            <span
+                                className={clsx(
+                                    "text-gray-300 font-suite text-[1.1rem]",
+                                    (buses.length === 0 && lastRefresh !== "") && "text-red-400",
+                                )}
+                            >
+                                {(lastRefresh === "") ? "로딩 중" : `${buses.length}대`}
                             </span>
                         </span>
                     </div>
