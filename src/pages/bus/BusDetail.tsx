@@ -4,8 +4,6 @@ import { FaCircle } from "react-icons/fa";
 
 import { getBus } from "../../Util";
 
-import RouteTypeTag from "../../component/RouteTypeTag.tsx";
-
 interface Bus {
     busType: number;
     lastStnId: bigint;
@@ -95,7 +93,10 @@ export default function BusDetail() {
                                         return idx === 0 ? (
                                             <span key={idx}>{v}</span>
                                         ) : (
-                                            <span className={"ml-0.5"} key={idx}>
+                                            <span
+                                                className={"ml-0.5"}
+                                                key={idx}
+                                            >
                                                 {v}
                                             </span>
                                         );
