@@ -1,7 +1,8 @@
 import $ from "jquery";
-import RouteTypeTag from "../../component/RouteTypeTag.tsx";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
-import { useState } from "react";
+import RouteTypeTag from "../../component/RouteTypeTag.tsx";
 import { clsx } from "clsx";
 
 interface BasicRouteInfo {
@@ -14,8 +15,13 @@ interface BasicRouteInfo {
 }
 
 export default function SearchRoutes() {
+    const [searchParams] = useSearchParams();
+
     const [searchInput, setSearchInput] = useState<string>("");
     const [routes, setRoutes] = useState<Array<BasicRouteInfo>>([]);
+    const [more, setMore] = useState(false);
+
+    const searchQuery = searchParams.get("query");
 
     const search: (query: string) => void = (query) => {
         $.ajax({
@@ -24,9 +30,29 @@ export default function SearchRoutes() {
             data: { query },
             dataType: "json",
         }).then((res) => {
-            setRoutes(res);
+            setRoutes(res["body"]);
+            setMore(res["header"]["more"]);
         });
     };
+
+    const searchMore: (query: string) => void = (query) => {
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/searchRoute",
+            data: { query: query, continueFrom: routes.length },
+            dataType: "json",
+        }).then((res) => {
+            // setRoutes((rep) => rep.push(res["body"]));
+            // setMore(res["header"]["more"]);
+        });
+    };
+
+    useEffect(() => {
+        if (searchQuery) {
+            setSearchInput(searchQuery);
+            search(searchQuery);
+        }
+    }, []);
 
     return (
         <div className={"flex flex-col items-center"}>
@@ -53,7 +79,11 @@ export default function SearchRoutes() {
                         "cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-2xl"
                     )}
                     onClick={() => {
-                        if (searchInput) search(searchInput);
+                        if (searchInput)
+                            window.location.assign(
+                                "./routes?query=" + searchInput
+                            );
+                        else alert("노선의 이름을 입력해주세요");
                     }}
                 />
             </div>
@@ -143,6 +173,26 @@ export default function SearchRoutes() {
                             </div>
                         </div>
                     ))}
+                {more && (
+                    <div className={clsx("flex flex-col items-center my-10")}>
+                        <span
+                            className={"text-[1.1rem] font-suite text-gray-300"}
+                        >
+                            검색결과가 더 존재합니다.
+                        </span>
+                        <input
+                            type={"button"}
+                            value={"더 검색하기"}
+                            className={clsx(
+                                "rounded-[5px] bg-gray-500 h-15 w-50 mt-3 font-SeoulNamsan text-[1.2rem]",
+                                "cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-2xl"
+                            )}
+                            onClick={() => {
+                                searchMore(searchQuery);
+                            }}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );
